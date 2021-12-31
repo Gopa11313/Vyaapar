@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/background_header"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen_16dp"
+        android:gravity="bottom|center"
+        android:orientation="vertical"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp">
+            <!-- <ProgressBar
+                 android:layout_gravity="center"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp" />-->
+
+            <net.qpaysolutions.QPay.CustumClasses.RoundImage
+                android:id="@+id/custum_navigation_header"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_view"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_duomenu_qpay_logo_vector" />
+
+            <!-- <ImageView
+                 android:id="@+id/header_add"
+                 android:layout_width="30dp"
+                 android:layout_height="50dp"
+                 android:layout_marginTop="80dp"
+                 android:layout_marginLeft="75dp"
+                 android:src="@drawable/ic_add"
+                 android:tint="@color/red500"
+                 android:text="+"
+                 android:textSize="30dp"
+
+                 />-->
+
+            <!--  <ProgressBar
+                  android:layout_gravity="center"
+                  android:id="@+id/pb_header"
+                  android:layout_width="30dp"
+                  android:layout_height="30dp"
+                  android:visibility="visible"
+                  android:background ="@xml/progress"
+                  />-->
+        </FrameLayout>
+
+        <net.qpaysolutions.QPay.CustumClasses.FontTextViewbold
+
+            android:id="@+id/userNameDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorGreyIcon"
+            android:textSize="@dimen/font_medium"
+            android:textStyle="bold"
+
+            />
+
+        <net.qpaysolutions.QPay.CustumClasses.FontTextViewRegular
+            android:id="@+id/userCellDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorGreyIcon"
+            android:textSize="@dimen/font_normal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+</LinearLayout>
