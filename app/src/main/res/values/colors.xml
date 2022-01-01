@@ -17,4 +17,5 @@
     <color name="colorGreyIcon">#606060</color>
     <color name="shadow_color">#000000</color>
     <color name="colorPrimarySecond">#1489CA</color>
+    <color name="gray200">#EEEEEE</color>
 </resources>

@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
-    tools:context=".product.ProductActivity">
+    tools:context=".supplier.SupplierActivity">
 
     <include layout="@layout/custum_toolbar" />
 
@@ -19,51 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Product Code"
-                android:textColor="@color/secondary"
-                android:textSize="14dp" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/branchName"
-                style="@style/CustomEditTextBorderTheme"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-                android:imeOptions="actionNext"
-                android:inputType="text|textNoSuggestions"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/cursor_edittext" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Description"
-                android:textColor="@color/secondary"
-                android:textSize="14dp" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/customerNAme"
-                style="@style/CustomEditTextBorderTheme"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:imeOptions="actionNext"
-                android:inputType="text|textNoSuggestions"
-                android:lines="10"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/cursor_edittext" />
+            android:padding="10dp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Product Image"
+                android:text="Logo"
                 android:textColor="@color/colorPrimarySecond"
                 android:textSize="14dp" />
 
@@ -71,19 +31,18 @@
                 android:id="@+id/idFront"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:src="@drawable/ic_cart" />
-
+                android:src="@drawable/logo" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Supplier"
+                android:text="Country"
                 android:textColor="@color/secondary"
                 android:textSize="14dp" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/Supplier"
+                android:id="@+id/country"
                 style="@style/CustomEditTextBorderTheme"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -97,12 +56,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Rate"
+                android:text="Tax"
                 android:textColor="@color/secondary"
                 android:textSize="14dp" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/rate"
+                android:id="@+id/tax"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Tax Reg. No."
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/taxRegNo"
                 style="@style/CustomEditTextBorderTheme"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -115,7 +93,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:elevation="0dp"
                 app:cardCornerRadius="5dp">
 
@@ -125,8 +102,6 @@
                     android:background="@color/primary"
                     android:text="Submit" />
             </androidx.cardview.widget.CardView>
-
         </LinearLayout>
-
     </ScrollView>
 </LinearLayout>

@@ -22,8 +22,9 @@ public class CustomerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer);
         toolbaruni=findViewById(R.id.toolbar);
         setSupportActionBar(toolbaruni);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         setTitleToolbar("Customer Register");
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbaruni.setOnClickListener(new View.OnClickListener() {
             @Override

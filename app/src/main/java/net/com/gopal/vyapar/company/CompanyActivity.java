@@ -1,4 +1,4 @@
-package net.com.gopal.vyapar.product;
+package net.com.gopal.vyapar.company;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,20 +11,19 @@ import net.com.gopal.vyapar.R;
 
 import java.util.Objects;
 
-public class ProductActivity extends AppCompatActivity {
+public class CompanyActivity extends AppCompatActivity {
     Toolbar toolbaruni;
     public TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+        setContentView(R.layout.activity_company);
         toolbaruni = findViewById(R.id.toolbar);
         setSupportActionBar(toolbaruni);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        setTitleToolbar("Product Register");
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        setTitleToolbar("Company Register");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbaruni.setOnClickListener(new View.OnClickListener() {
             @Override

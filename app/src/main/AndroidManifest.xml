@@ -13,10 +13,19 @@
         android:usesCleartextTraffic="true"
         tools:replace="icon,allowBackup"
         tools:targetApi="m">
-        <activity android:name=".product.ProductActivity"
+        <activity android:name=".supplier.SupplierActivity"></activity>
+        <activity
+            android:name=".folder.FolderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            />
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".company.CompanyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".product.ProductActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".customer.CustomerActivity"
             android:screenOrientation="portrait"
