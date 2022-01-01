@@ -24,4 +24,8 @@
         <!--        <item />-->
         <!--        <item>Lock Now</item>-->
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="allication_description">Dear User, your current data are stored in your application cache. To keep on using your it DO NOT clear or wipe the application cache.Thank You!</string>
+
 </resources>
