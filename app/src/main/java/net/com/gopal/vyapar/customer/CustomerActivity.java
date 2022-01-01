@@ -54,7 +54,7 @@ public class CustomerActivity extends AppCompatActivity implements View.OnClickL
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         setTitleToolbar("Customer Register");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbaruni.setOnClickListener(new View.OnClickListener() {
+        toolbaruni.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();

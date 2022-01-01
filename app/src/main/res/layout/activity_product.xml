@@ -29,7 +29,7 @@
                 android:textSize="14dp" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/branchName"
+                android:id="@+id/productCode"
                 style="@style/CustomEditTextBorderTheme"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -49,7 +49,7 @@
                 android:textSize="14dp" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/customerNAme"
+                android:id="@+id/description"
                 style="@style/CustomEditTextBorderTheme"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
@@ -68,7 +68,7 @@
                 android:textSize="14dp" />
 
             <ImageView
-                android:id="@+id/idFront"
+                android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:src="@drawable/ic_cart" />
@@ -120,6 +120,7 @@
                 app:cardCornerRadius="5dp">
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/submitButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/primary"
