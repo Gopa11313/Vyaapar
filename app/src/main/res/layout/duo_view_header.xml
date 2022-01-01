@@ -9,7 +9,7 @@
         android:id="@+id/background_header"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen_16dp"
+        android:layout_marginBottom="16dp"
         android:gravity="bottom|center"
         android:orientation="vertical"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -25,14 +25,14 @@
                  android:layout_width="30dp"
                  android:layout_height="30dp" />-->
 
-            <net.qpaysolutions.QPay.CustumClasses.RoundImage
+            <net.com.gopal.vyapar.custumclasses.RoundImage
                 android:id="@+id/custum_navigation_header"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:background="@drawable/round_view"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_duomenu_qpay_logo_vector" />
+                android:src="@drawable/logo" />
 
             <!-- <ImageView
                  android:id="@+id/header_add"
@@ -57,29 +57,29 @@
                   />-->
         </FrameLayout>
 
-        <net.qpaysolutions.QPay.CustumClasses.FontTextViewbold
+        <net.com.gopal.vyapar.custumclasses.FontTextViewbold
 
             android:id="@+id/userNameDrawer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dimen_8dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:text=""
             android:textColor="@color/colorGreyIcon"
-            android:textSize="@dimen/font_medium"
+            android:textSize="18sp"
             android:textStyle="bold"
 
             />
 
-        <net.qpaysolutions.QPay.CustumClasses.FontTextViewRegular
+        <net.com.gopal.vyapar.custumclasses.FontTextViewRegular
             android:id="@+id/userCellDrawer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text=""
             android:textColor="@color/colorGreyIcon"
-            android:textSize="@dimen/font_normal" />
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

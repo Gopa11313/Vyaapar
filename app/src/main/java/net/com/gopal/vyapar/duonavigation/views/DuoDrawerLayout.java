@@ -137,7 +137,7 @@ public class DuoDrawerLayout extends RelativeLayout {
 
         try {
             mMenuViewId = typedArray.getResourceId(R.styleable.DuoDrawerLayout_menu, DEFAULT_ATTRIBUTE_VALUE);
-            mContentViewId = typedArray.getResourceId(R.styleable.DuoDrawerLayout_content, DEFAULT_ATTRIBUTE_VALUE);
+//            montentViewId = typedArray.getResourceId(R.styleable.DuoDrawerLayout_content, DEFAULT_ATTRIBUTE_VALUE);
             mContentScaleClosed = typedArray.getFloat(R.styleable.DuoDrawerLayout_contentScaleClosed, CONTENT_SCALE_CLOSED);
             mContentScaleOpen = typedArray.getFloat(R.styleable.DuoDrawerLayout_contentScaleOpen, CONTENT_SCALE_OPEN);
             mMenuScaleClosed = typedArray.getFloat(R.styleable.DuoDrawerLayout_menuScaleClosed, MENU_SCALE_CLOSED);

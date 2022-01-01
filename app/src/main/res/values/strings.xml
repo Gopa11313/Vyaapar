@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">Vyapar</string>
+    <string name="tag_menu">menu</string>
+    <string name="tag_content">content</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
+    <string-array name="ld_activityScreenTitles">
+        <item><font size="8dp">Home</font></item>
+        <item><font size="8dp">Invite Friends</font></item>
+        <item><font size="8dp">My Card</font></item>
+        <item><font size="8dp">Recharge Pin History</font></item>
+        <item><font size="8dp">My Code</font></item>
+        <item><font size="8dp">Transaction History</font></item>
+        <item><font size="8dp">Settings</font></item>
+        <item><font size="8dp">Notification</font></item>
+        <item><font size="8dp">FAQ</font></item>
+        <item><font size="8dp">Contact</font></item>
+        <item><font size="8dp">KYC Info</font></item>
+        <item><font size="8dp">Redeem Point</font></item>
+        <item><font size="8dp">About Us</font></item>
+        <!--  <item>KYC</item>-->
+
+        <!--<item>Union Pay</item>-->
+        <!--        <item />-->
+        <!--        <item>Lock Now</item>-->
+    </string-array>
 </resources>

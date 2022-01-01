@@ -5,6 +5,10 @@ import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.LayoutRes;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -16,17 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.DrawableRes;
-import androidx.annotation.LayoutRes;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-
 import net.com.gopal.vyapar.R;
 
-
-/**
- * Created by PSD on 13-04-17.
- */
 
 public class DuoMenuView extends RelativeLayout {
     private static final String TAG_FOOTER = "footer";
@@ -80,7 +75,7 @@ public class DuoMenuView extends RelativeLayout {
      * Initialize the menu view.
      */
     private void initialize() {
-       ViewGroup rootView = (ViewGroup) inflate(getContext(), R.layout.duo_view_menu, this);
+        ViewGroup rootView = (ViewGroup) inflate(getContext(), R.layout.duo_view_menu, this);
         mMenuViewHolder = new MenuViewHolder(rootView);
         mLayoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDataSetObserver = new DataSetObserver() {
@@ -94,8 +89,9 @@ public class DuoMenuView extends RelativeLayout {
         };
 
         handleBackground();
-        handleHeader();
+
         handleFooter();
+        handleHeader();
     }
 
     /**
@@ -126,7 +122,7 @@ public class DuoMenuView extends RelativeLayout {
         if (mHeaderViewId == DEFAULT_LAYOUT_ATTRIBUTE_VALUE || mMenuViewHolder.mMenuHeader == null) {
             return;
         }
-
+        System.out.println(mHeaderViewId);
         View view = mLayoutInflater.inflate(mHeaderViewId, null, false);
 
         if (view != null) {

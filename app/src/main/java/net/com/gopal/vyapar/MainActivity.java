@@ -1,9 +1,10 @@
 package net.com.gopal.vyapar;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import net.com.gopal.vyapar.splash.SplashActivity;
 

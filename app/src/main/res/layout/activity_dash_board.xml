@@ -1,9 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".dashboard.DashBoardActivity">
+    android:layout_gravity="start"
+    android:gravity="start">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--    <net.com.gopal.vyapar.duonavigation.views.DuoMenuView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="start"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        android:gravity="start"-->
+<!--        android:orientation="vertical"-->
+<!--        android:tag="@string/tag_menu"-->
+<!--        app:header="@layout/duo_view_header"-->
+<!--        />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:gravity="start"
+        android:orientation="vertical"
+        android:tag="@string/tag_content"
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginLeft="4dp"
+            android:background="@android:color/white">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="55dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo"
+
+                />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/notificationImageView"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginEnd="16dp"
+                android:elevation="12dp"
+                android:src="@drawable/ic_gear" />
+
+
+            <ImageView
+                android:id="@+id/infoImageView"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/ic_information_filled_red"
+                android:elevation="12dp"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/my_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_action_mycode"
+                android:visibility="gone"
+                />
+
+        </androidx.appcompat.widget.Toolbar>
+
+<!--        <include layout="@layout/no_internet_connection_layout" />-->
+        <!--   <include layout="@layout/toolbar"></include>-->
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+</LinearLayout>
