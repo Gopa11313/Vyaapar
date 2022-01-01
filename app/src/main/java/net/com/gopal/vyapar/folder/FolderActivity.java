@@ -5,11 +5,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import net.com.gopal.vyapar.MainActivity;
 import net.com.gopal.vyapar.R;
+import net.com.gopal.vyapar.dashboard.DashBoardActivity;
+import net.com.gopal.vyapar.product.ProductActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -53,8 +57,8 @@ public class FolderActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        Intent intent = new Intent(TopUpToWalletFromBankAccountActivity.this, AccountActivity.class);
-//        startActivity(intent);
+        Intent intent=new Intent(FolderActivity.this, DashBoardActivity.class);
+        startActivity(intent);
         finish();
     }
     private void loadFolders(){

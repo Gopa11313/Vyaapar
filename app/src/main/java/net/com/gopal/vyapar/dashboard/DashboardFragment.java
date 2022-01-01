@@ -17,11 +17,12 @@ import net.com.gopal.vyapar.R;
 import net.com.gopal.vyapar.company.CompanyActivity;
 import net.com.gopal.vyapar.customer.CustomerActivity;
 import net.com.gopal.vyapar.product.ProductActivity;
+import net.com.gopal.vyapar.supplier.SupplierActivity;
 
 import org.jetbrains.annotations.NotNull;
 
 public class DashboardFragment extends Fragment implements View.OnClickListener {
-    private LinearLayout customerLayout, productLayout,companyLayout;
+    private LinearLayout customerLayout, productLayout,companyLayout,SupplierLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,12 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         super.onViewCreated(view, savedInstanceState);
         customerLayout = view.findViewById(R.id.customerLayout);
         productLayout = view.findViewById(R.id.productLayout);
+        SupplierLayout = view.findViewById(R.id.SupplierLayout);
         companyLayout = view.findViewById(R.id.companyLayout);
         customerLayout.setOnClickListener(this);
         productLayout.setOnClickListener(this);
         companyLayout.setOnClickListener(this);
+        SupplierLayout.setOnClickListener(this);
 
 
     }
@@ -62,9 +65,14 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             case R.id.productLayout:
                 Intent intent1 = new Intent(requireActivity(), ProductActivity.class);
                 startActivity(intent1);
+                break;
             case R.id.companyLayout:
                 Intent intent2=new Intent(requireActivity(), CompanyActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.SupplierLayout:
+                Intent intent3=new Intent(requireActivity(), SupplierActivity.class);
+                startActivity(intent3);
                 break;
         }
     }

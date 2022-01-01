@@ -13,7 +13,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="icon,allowBackup"
         tools:targetApi="m">
-        <activity android:name=".supplier.SupplierActivity"></activity>
+        <activity android:name=".supplier.SupplierActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".folder.FolderActivity"
             android:screenOrientation="portrait"

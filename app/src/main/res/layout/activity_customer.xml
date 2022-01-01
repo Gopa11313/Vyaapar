@@ -47,7 +47,7 @@
                 android:textSize="14dp" />
 
             <Spinner
-                android:id="@+id/zone"
+                android:id="@+id/customerType"
                 style="@style/SpinnerBorderTheme"
                 android:layout_width="match_parent"
                 android:layout_height="48dp" />
@@ -181,7 +181,7 @@
                         android:textSize="14dp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/xip"
+                        android:id="@+id/zip"
                         style="@style/CustomEditTextBorderTheme"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
@@ -260,6 +260,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/submitButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/primary"
