@@ -13,15 +13,27 @@
         android:usesCleartextTraffic="true"
         tools:replace="icon,allowBackup"
         tools:targetApi="m">
+        <activity android:name=".product.ProductActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+        <activity
+            android:name=".customer.CustomerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".dashboard.DashBoardActivity"
-            android:exported="false" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".splash.SplashActivity"
-            android:exported="false" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".customer.CustomerActivity">
+
+    <include layout="@layout/custum_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Branch"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/branchName"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Customer Type"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <Spinner
+                android:id="@+id/zone"
+                style="@style/SpinnerBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Name"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/customerNAme"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Email"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/emailAddress"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="TiIN Number"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/tin_number"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Address"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/address"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="City"
+                        android:textColor="@color/secondary"
+                        android:textSize="14dp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/city"
+                        style="@style/CustomEditTextBorderTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:imeOptions="actionNext"
+                        android:inputType="text|textNoSuggestions"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/cursor_edittext" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Zip"
+                        android:textColor="@color/secondary"
+                        android:textSize="14dp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/xip"
+                        style="@style/CustomEditTextBorderTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:imeOptions="actionNext"
+                        android:inputType="text|textNoSuggestions"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/cursor_edittext" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Mobile Number"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/mobile_number"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Land Line"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/land_line"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Note"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/notes"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:lines="10"
+                android:scrollHorizontally="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:elevation="0dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="5dp"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary"
+                    android:padding="10dp"
+                    android:text="Submit"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>
