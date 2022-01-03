@@ -15,8 +15,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import net.com.gopal.vyapar.MainActivity;
 import net.com.gopal.vyapar.R;
@@ -25,6 +28,7 @@ import net.com.gopal.vyapar.dashboard.DashBoardActivity;
 import net.com.gopal.vyapar.database.AppDatabase;
 import net.com.gopal.vyapar.database.dao.CustomerDao;
 import net.com.gopal.vyapar.database.entity.Customer;
+import net.com.gopal.vyapar.invoice.InvoiceActivity;
 import net.com.gopal.vyapar.product.ProductActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,12 +41,15 @@ import kotlin.coroutines.CoroutineContext;
 import kotlinx.coroutines.CoroutineScope;
 import kotlinx.coroutines.Dispatchers;
 
-public class CustomerActivity extends AppCompatActivity implements View.OnClickListener{
+public class CustomerActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbaruni;
     public TextView title;
-    private AppCompatEditText branchName,customerNAme,emailAddress,tin_number,address,city,zip,mobile_number,land_line,notes;
+    private AppCompatEditText branchName, customerNAme, emailAddress, tin_number, address, city, zip, mobile_number, land_line, notes;
     private Spinner customerType;
     private AppCompatButton submitButton;
+    private String from = null;
+    private Boolean success = false;
+    private LinearLayout snackbar_action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,26 +69,29 @@ public class CustomerActivity extends AppCompatActivity implements View.OnClickL
         });
         init();
     }
-    private void init(){
-        branchName=findViewById(R.id.branchName);
-        customerNAme=findViewById(R.id.customerNAme);
-        emailAddress=findViewById(R.id.emailAddress);
-        tin_number=findViewById(R.id.tin_number);
-        address=findViewById(R.id.address);
-        city=findViewById(R.id.city);
-        zip=findViewById(R.id.zip);
-        mobile_number=findViewById(R.id.mobile_number);
-        land_line=findViewById(R.id.land_line);
-        notes=findViewById(R.id.notes);
 
-        customerType=findViewById(R.id.customerType);
-        submitButton=findViewById(R.id.submitButton);
+    private void init() {
+        branchName = findViewById(R.id.branchName);
+        customerNAme = findViewById(R.id.customerNAme);
+        emailAddress = findViewById(R.id.emailAddress);
+        tin_number = findViewById(R.id.tin_number);
+        address = findViewById(R.id.address);
+        snackbar_action = findViewById(R.id.snackbar_action);
+        city = findViewById(R.id.city);
+        zip = findViewById(R.id.zip);
+        mobile_number = findViewById(R.id.mobile_number);
+        land_line = findViewById(R.id.land_line);
+        notes = findViewById(R.id.notes);
+        Intent intent = getIntent();
+        from = intent.getStringExtra("from");
+        customerType = findViewById(R.id.customerType);
+        submitButton = findViewById(R.id.submitButton);
         submitButton.setOnClickListener(this);
-        ArrayList<Customer> customerType=new ArrayList<>();
-        Customer customer=new Customer()    ;
+        ArrayList<Customer> customerType = new ArrayList<>();
+        Customer customer = new Customer();
         customer.setCustomerType("Credit");
         customerType.add(customer);
-        Customer customer1=new Customer()    ;
+        Customer customer1 = new Customer();
         customer1.setCustomerType("cash");
         customerType.add(customer1);
         setIssueFrom(customerType);
@@ -104,6 +114,7 @@ public class CustomerActivity extends AppCompatActivity implements View.OnClickL
         startActivity(intent);
         finish();
     }
+
     private void setIssueFrom(final ArrayList<Customer> customerTypes) {
 
         SpineerAdapter spineerAdapter = new SpineerAdapter(getApplicationContext(), customerTypes);
@@ -120,11 +131,13 @@ public class CustomerActivity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.submitButton:
                 try {
+                    success = false;
                     Customer customer = new Customer();
                     customer.setAddress(address.getText().toString());
                     customer.setBranch(address.getText().toString());
@@ -142,15 +155,44 @@ public class CustomerActivity extends AppCompatActivity implements View.OnClickL
                         public void run() {
                             AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
                             db.customerDao().insertAll(customer);
-                            List<Customer> cs=db.customerDao().getAll();
-                            System.out.println(db.customerDao().getAll());
+                            if (from == null) {
+                                success = true;
+                            } else {
+                                finish();
+                                startActivity(new Intent(CustomerActivity.this, InvoiceActivity.class));
+                            }
+
                         }
                     });
+                    Snackbar snackbar = Snackbar
+                            .make(snackbar_action, "Customer Register Successfully!!", Snackbar.LENGTH_LONG)
+                            .setAction("Ok", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
 
-                }catch (Exception e){
+//                                    Snackbar snackbar1 = Snackbar.make(snackbar_action, "Message is restored!", Snackbar.LENGTH_SHORT);
+//                                    snackbar1.show();
+                                }
+                            });
+
+                    snackbar.show();
+                    clear();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
         }
+    }
+    private void clear(){
+        branchName.setText("");
+        customerNAme.setText("");
+        emailAddress.setText("");
+        tin_number.setText("");
+        address.setText("");
+        city.setText("");
+        zip.setText("");
+        mobile_number.setText("");
+        land_line.setText("");
+        notes.setText("");
     }
 }

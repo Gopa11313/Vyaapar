@@ -13,37 +13,49 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import net.com.gopal.vyapar.R;
 import net.com.gopal.vyapar.company.CompanyActivity;
+import net.com.gopal.vyapar.customer.CustomerActivity;
 import net.com.gopal.vyapar.customer.adapter.SpineerAdapter;
 import net.com.gopal.vyapar.dashboard.DashBoardActivity;
+import net.com.gopal.vyapar.database.AppDatabase;
 import net.com.gopal.vyapar.database.entity.Customer;
+import net.com.gopal.vyapar.invoice.adapter.CustomerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class InvoiceActivity extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView invoices;
     Toolbar toolbaruni;
     public TextView title;
-    private AppCompatEditText invoiceCode,pick_date,tin_Number,selectCustomer;
+    private AppCompatEditText invoiceCode, pick_date, tin_Number,customername ;
     private Spinner invoice_type;
-    private AppCompatButton createCustomer,addItem;
+    private AppCompatButton createCustomer, addItem;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private String futureDate;
     private Dialog dialog;
     private RecyclerView recyclerView;
-    private DistrictAdapter adapter;
+    private CustomerAdapter adapter;
+    private ArrayList<Customer> customr = new ArrayList<>();
+    LinearLayout selectCustomer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +75,8 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
 
         init();
     }
-    private void init(){
+
+    private void init() {
         invoices = findViewById(R.id.invoices);
         invoiceCode = findViewById(R.id.invoiceCode);
         pick_date = findViewById(R.id.pick_date);
@@ -72,18 +85,32 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         selectCustomer = findViewById(R.id.selectCustomer);
         createCustomer = findViewById(R.id.createCustomer);
         addItem = findViewById(R.id.addItem);
+        customername = findViewById(R.id.customername);
         createCustomer.setOnClickListener(this);
+        selectCustomer.setOnClickListener(this);
         pick_date.setOnClickListener(this);
         addItem.setOnClickListener(this);
-        ArrayList<Customer> customerTypes=new ArrayList<>();
-        Customer customer=new Customer()    ;
+        ArrayList<Customer> customerTypes = new ArrayList<>();
+        Customer customer = new Customer();
         customer.setCustomerType("Credit");
         customerTypes.add(customer);
-        Customer customer1=new Customer()    ;
+        Customer customer1 = new Customer();
         customer1.setCustomerType("cash");
         customerTypes.add(customer1);
         setIssueFrom(customerTypes);
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase db = AppDatabase.getDatabase(InvoiceActivity.this);
+                List<Customer> cus = db.customerDao().getAll();
+                customr = new ArrayList<>(cus);
+                if (customr.size() > 0) {
+
+                }
+            }
+        });
     }
+
     public Toolbar getToolbar() {
         return toolbaruni;
     }
@@ -104,17 +131,25 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.createCustomer:
+                Intent intent=new Intent(InvoiceActivity.this, CustomerActivity.class);
+                intent.putExtra("from","invoice");
+                startActivity(intent);
                 break;
             case R.id.addItem:
+
                 break;
-                case R.id.pick_date:
-                    showCalendar();
+            case R.id.pick_date:
+                showCalendar();
+                break;
+            case R.id.selectCustomer:
+                showCustomerDialog();
                 break;
         }
 
     }
+
     private void showCalendar() {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, (view, year, month, dayOfMonth) -> {
@@ -129,6 +164,11 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
+    private void setAddItem(){
+        Dialog dialog1=new Dialog(this, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog1.getLayoutInflater();
+    }
+
     private void setIssueFrom(final ArrayList<Customer> customerTypes) {
 
         SpineerAdapter spineerAdapter = new SpineerAdapter(getApplicationContext(), customerTypes);
@@ -145,7 +185,8 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-    private void showDistrictDialog() {
+
+    private void showCustomerDialog() {
         dialog = new Dialog(this, WindowManager.LayoutParams.MATCH_PARENT);
         dialog.setContentView(R.layout.dialog_fullscreen_withdraw);
         recyclerView = dialog.findViewById(R.id.bankRecyclerView);
@@ -160,23 +201,23 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         imageView.setImageResource(R.drawable.ic_action_cancel);
         ImageView closeBranch = searchView.findViewById(R.id.search_button);
         closeBranch.setImageResource(R.drawable.ic_search_black_24dp);
-
-        adapter = new DistrictAdapter(districts, new DistrictAdapter.ClickCallBack() {
-            @Override
-            public void onClick(District district) {
-                districtId = district.getId();
-                selectedDistrict=district;
-                AppCache.setCity(districtId);
-                issuedfromEdiText.setText(district.getDistrict());
-                issuefromLayout.setError(null);
-                dialog.dismiss();
-            }
-        });
-
-        RecyclerView.LayoutManager mLayoutManagerTo = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManagerTo);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+       if(customr.size()>0) {
+           adapter = new CustomerAdapter(customr, new CustomerAdapter.ClickCallBack() {
+               @Override
+               public void onClick(Customer customer) {
+//                   districtId = district.getId();
+//                   selectedDistrict=district;
+//                   AppCache.setCity(districtId);
+                   customername.setText(customer.getName());
+//                   issuefromLayout.setError(null);
+                   dialog.dismiss();
+               }
+           });
+           RecyclerView.LayoutManager mLayoutManagerTo = new LinearLayoutManager(InvoiceActivity.this);
+           recyclerView.setLayoutManager(mLayoutManagerTo);
+           recyclerView.setItemAnimator(new DefaultItemAnimator());
+           recyclerView.setAdapter(adapter);
+       }
         dialog.show();
 
 
@@ -200,5 +241,6 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 return true;
             }
         });
+
     }
 }
