@@ -16,13 +16,14 @@ import android.widget.LinearLayout;
 import net.com.gopal.vyapar.R;
 import net.com.gopal.vyapar.company.CompanyActivity;
 import net.com.gopal.vyapar.customer.CustomerActivity;
+import net.com.gopal.vyapar.invoice.InvoiceActivity;
 import net.com.gopal.vyapar.product.ProductActivity;
 import net.com.gopal.vyapar.supplier.SupplierActivity;
 
 import org.jetbrains.annotations.NotNull;
 
 public class DashboardFragment extends Fragment implements View.OnClickListener {
-    private LinearLayout customerLayout, productLayout,companyLayout,SupplierLayout;
+    private LinearLayout customerLayout, productLayout, companyLayout, SupplierLayout, invoice;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,10 +48,12 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         productLayout = view.findViewById(R.id.productLayout);
         SupplierLayout = view.findViewById(R.id.SupplierLayout);
         companyLayout = view.findViewById(R.id.companyLayout);
+        invoice = view.findViewById(R.id.invoice);
         customerLayout.setOnClickListener(this);
         productLayout.setOnClickListener(this);
         companyLayout.setOnClickListener(this);
         SupplierLayout.setOnClickListener(this);
+        invoice.setOnClickListener(this);
 
 
     }
@@ -67,12 +70,16 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
                 startActivity(intent1);
                 break;
             case R.id.companyLayout:
-                Intent intent2=new Intent(requireActivity(), CompanyActivity.class);
+                Intent intent2 = new Intent(requireActivity(), CompanyActivity.class);
                 startActivity(intent2);
                 break;
             case R.id.SupplierLayout:
-                Intent intent3=new Intent(requireActivity(), SupplierActivity.class);
+                Intent intent3 = new Intent(requireActivity(), SupplierActivity.class);
                 startActivity(intent3);
+                break;
+            case R.id.invoice:
+                Intent intent4 = new Intent(requireActivity(), InvoiceActivity.class);
+                startActivity(intent4);
                 break;
         }
     }
