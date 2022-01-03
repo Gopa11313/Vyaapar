@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -13,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -34,7 +37,9 @@ import net.com.gopal.vyapar.customer.adapter.SpineerAdapter;
 import net.com.gopal.vyapar.dashboard.DashBoardActivity;
 import net.com.gopal.vyapar.database.AppDatabase;
 import net.com.gopal.vyapar.database.entity.Customer;
+import net.com.gopal.vyapar.database.entity.Product;
 import net.com.gopal.vyapar.invoice.adapter.CustomerAdapter;
+import net.com.gopal.vyapar.product.adapter.ProductAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,7 +50,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     private RecyclerView invoices;
     Toolbar toolbaruni;
     public TextView title;
-    private AppCompatEditText invoiceCode, pick_date, tin_Number,customername ;
+    private AppCompatEditText invoiceCode, pick_date, tin_Number, customername;
     private Spinner invoice_type;
     private AppCompatButton createCustomer, addItem;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -53,9 +58,11 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     private Dialog dialog;
     private RecyclerView recyclerView;
     private CustomerAdapter adapter;
+    private ProductAdapter adapter1;
     private ArrayList<Customer> customr = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
     LinearLayout selectCustomer;
-
+    Product product=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,11 +111,11 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 AppDatabase db = AppDatabase.getDatabase(InvoiceActivity.this);
                 List<Customer> cus = db.customerDao().getAll();
                 customr = new ArrayList<>(cus);
-                if (customr.size() > 0) {
-
-                }
+                List<Product> pros = db.productDao().getAll();
+                products = new ArrayList<>(pros);
             }
         });
+
     }
 
     public Toolbar getToolbar() {
@@ -133,12 +140,12 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.createCustomer:
-                Intent intent=new Intent(InvoiceActivity.this, CustomerActivity.class);
-                intent.putExtra("from","invoice");
+                Intent intent = new Intent(InvoiceActivity.this, CustomerActivity.class);
+                intent.putExtra("from", "invoice");
                 startActivity(intent);
                 break;
             case R.id.addItem:
-
+                setAddItem();
                 break;
             case R.id.pick_date:
                 showCalendar();
@@ -164,9 +171,16 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
-    private void setAddItem(){
-        Dialog dialog1=new Dialog(this, WindowManager.LayoutParams.MATCH_PARENT);
-        dialog1.getLayoutInflater();
+
+    private void setAddItem() {
+        Dialog dialog1 = new Dialog(this, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog1.setContentView(R.layout.add_item_layout);
+        AppCompatEditText selectItem = dialog1.findViewById(R.id.selectItem);
+        selectItem.setOnClickListener(v -> {
+          Product p  =  showProductDialog();
+            selectItem.setText(p.getDescription());
+        });
+        dialog1.show();
     }
 
     private void setIssueFrom(final ArrayList<Customer> customerTypes) {
@@ -201,23 +215,23 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         imageView.setImageResource(R.drawable.ic_action_cancel);
         ImageView closeBranch = searchView.findViewById(R.id.search_button);
         closeBranch.setImageResource(R.drawable.ic_search_black_24dp);
-       if(customr.size()>0) {
-           adapter = new CustomerAdapter(customr, new CustomerAdapter.ClickCallBack() {
-               @Override
-               public void onClick(Customer customer) {
+        if (customr.size() > 0) {
+            adapter = new CustomerAdapter(customr, new CustomerAdapter.ClickCallBack() {
+                @Override
+                public void onClick(Customer customer) {
 //                   districtId = district.getId();
 //                   selectedDistrict=district;
 //                   AppCache.setCity(districtId);
-                   customername.setText(customer.getName());
+                    customername.setText(customer.getName());
 //                   issuefromLayout.setError(null);
-                   dialog.dismiss();
-               }
-           });
-           RecyclerView.LayoutManager mLayoutManagerTo = new LinearLayoutManager(InvoiceActivity.this);
-           recyclerView.setLayoutManager(mLayoutManagerTo);
-           recyclerView.setItemAnimator(new DefaultItemAnimator());
-           recyclerView.setAdapter(adapter);
-       }
+                    dialog.dismiss();
+                }
+            });
+            RecyclerView.LayoutManager mLayoutManagerTo = new LinearLayoutManager(InvoiceActivity.this);
+            recyclerView.setLayoutManager(mLayoutManagerTo);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(adapter);
+        }
         dialog.show();
 
 
@@ -243,4 +257,71 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         });
 
     }
+
+    private Product showProductDialog() {
+        dialog = new Dialog(this, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setContentView(R.layout.dialog_fullscreen_withdraw);
+        recyclerView = dialog.findViewById(R.id.bankRecyclerView);
+        SearchView searchView = dialog.findViewById(R.id.searchView);
+        searchView.setIconifiedByDefault(true);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        EditText search = searchView.findViewById(R.id.search_src_text);
+        search.setTextColor(getResources().getColor(R.color.white));
+        search.setHintTextColor(getResources().getColor(android.R.color.white));
+        ImageView imageView = searchView.findViewById(R.id.search_close_btn);
+        imageView.setImageResource(R.drawable.ic_action_cancel);
+        ImageView closeBranch = searchView.findViewById(R.id.search_button);
+        closeBranch.setImageResource(R.drawable.ic_search_black_24dp);
+        if (products.size() > 0) {
+            adapter1 = new ProductAdapter(products, new ProductAdapter.ClickCallBack() {
+                @Override
+                public void onClick(Product products) {
+//                   districtId = district.getId();
+//                   selectedDistrict=district;
+//                   AppCache.setCity(districtId);
+//                    customername.setText(products.getDescription());
+                    product=products;
+//                   issuefromLayout.setError(null);
+                    dialog.dismiss();
+                }
+            });
+            RecyclerView.LayoutManager mLayoutManagerTo = new LinearLayoutManager(InvoiceActivity.this);
+            recyclerView.setLayoutManager(mLayoutManagerTo);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(adapter1);
+        }
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.show();
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        float density = getResources().getDisplayMetrics().density;
+        lp.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(lp);
+
+
+        ImageView backArrowImageViews = dialog.findViewById(R.id.backArrowImageView);
+        backArrowImageViews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter1.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter1.getFilter().filter(newText);
+                return true;
+            }
+        });
+        System.out.println(product);
+        return product;
+    }
+
 }

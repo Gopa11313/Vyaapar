@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Description"
+                android:text="name"
                 android:textColor="@color/secondary"
                 android:textSize="14dp" />
 
@@ -52,10 +52,10 @@
                 android:id="@+id/description"
                 style="@style/CustomEditTextBorderTheme"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="48dp"
                 android:imeOptions="actionNext"
                 android:inputType="text|textNoSuggestions"
-                android:lines="10"
+                android:lines="1"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textCursorDrawable="@drawable/cursor_edittext" />

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:background="@color/transparent"
+    android:layout_marginRight="20dp"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/secondary"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="Add a Item"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="18dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Item"
+            android:textColor="@color/secondary"
+            android:textSize="14dp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/selectItem"
+            style="@style/CustomEditTextBorderTheme"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:editable="false"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@drawable/cursor_edittext" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="2">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Quantity"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/quantity"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="4dp"
+            android:layout_height="0dp"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rate"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/rate"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="2">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Discount"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/discount"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="%"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="4dp"
+            android:layout_height="0dp"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tax"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/tax"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="%"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="totoal"
+        android:textColor="@color/secondary"
+        android:textSize="14dp" />
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/totoal"
+        style="@style/CustomEditTextBorderTheme"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:imeOptions="actionNext"
+        android:inputType="text|textNoSuggestions"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textCursorDrawable="@drawable/cursor_edittext" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:weightSum="2">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:elevation="0dp"
+            app:cardCornerRadius="5dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/red"
+                android:text="Cancel"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:layout_width="4dp"
+            android:layout_height="0dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:elevation="0dp"
+            app:cardCornerRadius="5dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary"
+                android:text="Cancel"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+
+</LinearLayout>
