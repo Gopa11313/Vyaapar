@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="20dp"
-    android:background="@color/transparent"
+    android:background="@color/white"
     android:layout_marginRight="20dp"
     android:gravity="center"
+    android:padding="10dp"
     android:layout_gravity="center"
     android:orientation="vertical">
 
@@ -70,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:imeOptions="actionNext"
-                android:inputType="text|textNoSuggestions"
+                android:inputType="number"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textCursorDrawable="@drawable/cursor_edittext" />
@@ -97,6 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:imeOptions="actionNext"
+                android:digits="1234567890."
                 android:inputType="text|textNoSuggestions"
                 android:singleLine="true"
                 android:textColor="@color/black"
@@ -130,8 +132,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:hint="%"
+                android:digits=""
                 android:imeOptions="actionNext"
-                android:inputType="text|textNoSuggestions"
+                android:inputType="number"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textCursorDrawable="@drawable/cursor_edittext" />
@@ -159,7 +162,7 @@
                 android:layout_height="48dp"
                 android:hint="%"
                 android:imeOptions="actionNext"
-                android:inputType="text|textNoSuggestions"
+                android:inputType="number"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textCursorDrawable="@drawable/cursor_edittext" />
@@ -171,7 +174,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="totoal"
+        android:text="iTotal"
         android:textColor="@color/secondary"
         android:textSize="14dp" />
     <androidx.appcompat.widget.AppCompatEditText
@@ -180,6 +183,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:imeOptions="actionNext"
+        android:editable="false"
         android:inputType="text|textNoSuggestions"
         android:singleLine="true"
         android:textColor="@color/black"
@@ -200,6 +204,7 @@
             app:cardCornerRadius="5dp">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/red"
@@ -222,7 +227,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/secondary"
-                android:text="Cancel"
+                android:text="Proceed"
                 android:textColor="@color/white" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>

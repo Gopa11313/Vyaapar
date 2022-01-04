@@ -62,7 +62,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Customer> customr = new ArrayList<>();
     private ArrayList<Product> products = new ArrayList<>();
     LinearLayout selectCustomer;
-    Product product=null;
+    AppCompatEditText selectItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,14 +173,19 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void setAddItem() {
-        Dialog dialog1 = new Dialog(this, WindowManager.LayoutParams.MATCH_PARENT);
+        Dialog dialog1 = new Dialog(this, WindowManager.LayoutParams.WRAP_CONTENT);
         dialog1.setContentView(R.layout.add_item_layout);
-        AppCompatEditText selectItem = dialog1.findViewById(R.id.selectItem);
+        selectItem = dialog1.findViewById(R.id.selectItem);
         selectItem.setOnClickListener(v -> {
-          Product p  =  showProductDialog();
-            selectItem.setText(p.getDescription());
+          showProductDialog();
         });
         dialog1.show();
+        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog1.getWindow().getAttributes());
+        float density = getResources().getDisplayMetrics().density;
+        lp.gravity = Gravity.CENTER;
+        dialog1.getWindow().setAttributes(lp);
     }
 
     private void setIssueFrom(final ArrayList<Customer> customerTypes) {
@@ -258,8 +263,8 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    private Product showProductDialog() {
-        dialog = new Dialog(this, WindowManager.LayoutParams.WRAP_CONTENT);
+    private void showProductDialog() {
+        dialog = new Dialog(this, WindowManager.LayoutParams.MATCH_PARENT);
         dialog.setContentView(R.layout.dialog_fullscreen_withdraw);
         recyclerView = dialog.findViewById(R.id.bankRecyclerView);
         SearchView searchView = dialog.findViewById(R.id.searchView);
@@ -281,7 +286,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
 //                   selectedDistrict=district;
 //                   AppCache.setCity(districtId);
 //                    customername.setText(products.getDescription());
-                    product=products;
+                    setTextInCustomer(products);
 //                   issuefromLayout.setError(null);
                     dialog.dismiss();
                 }
@@ -320,8 +325,10 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 return true;
             }
         });
-        System.out.println(product);
-        return product;
+    }
+    private void setTextInCustomer(Product product){
+        selectItem.setText(product.getDescription());
+
     }
 
 }
