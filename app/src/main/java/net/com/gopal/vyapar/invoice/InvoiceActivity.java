@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,6 +41,9 @@ import net.com.gopal.vyapar.database.AppDatabase;
 import net.com.gopal.vyapar.database.entity.Customer;
 import net.com.gopal.vyapar.database.entity.Product;
 import net.com.gopal.vyapar.invoice.adapter.CustomerAdapter;
+import net.com.gopal.vyapar.invoice.adapter.InvoiceAdapter;
+import net.com.gopal.vyapar.invoice.model.Invoice;
+import net.com.gopal.vyapar.invoice.model.InvoiceItem;
 import net.com.gopal.vyapar.product.adapter.ProductAdapter;
 
 import java.text.SimpleDateFormat;
@@ -63,6 +68,13 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Product> products = new ArrayList<>();
     LinearLayout selectCustomer;
     AppCompatEditText selectItem;
+    AppCompatEditText totoal;
+    AppCompatEditText rate;
+    AppCompatEditText quantity;
+    AppCompatEditText discount;
+    AppCompatEditText tax;
+    ArrayList<InvoiceItem> invoiceItems = new ArrayList<>();
+    InvoiceAdapter invoiceAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +127,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 products = new ArrayList<>(pros);
             }
         });
-
+//        setData();
     }
 
     public Toolbar getToolbar() {
@@ -156,6 +168,20 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         }
 
     }
+    private void setData(){
+        if(!invoiceItems.isEmpty()) {
+             invoiceAdapter = new InvoiceAdapter(invoiceItems, new InvoiceAdapter.ClickCallBack() {
+                @Override
+                public void onClick(Invoice invoice) {
+
+                }
+            });
+            LinearLayoutManager layoutManager=new LinearLayoutManager(this);
+            invoices.setLayoutManager(layoutManager);
+            invoices.setAdapter(invoiceAdapter);
+            invoiceAdapter.notifyDataSetChanged();
+        }
+    }
 
     private void showCalendar() {
         Calendar calendar = Calendar.getInstance();
@@ -176,8 +202,98 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         Dialog dialog1 = new Dialog(this, WindowManager.LayoutParams.WRAP_CONTENT);
         dialog1.setContentView(R.layout.add_item_layout);
         selectItem = dialog1.findViewById(R.id.selectItem);
+        rate = dialog1.findViewById(R.id.rate);
+        totoal = dialog1.findViewById(R.id.totoal);
+        quantity = dialog1.findViewById(R.id.quantity);
+        discount = dialog1.findViewById(R.id.discount);
+        tax = dialog1.findViewById(R.id.tax);
+        AppCompatButton cancel = dialog1.findViewById(R.id.cancel);
+        AppCompatButton proceed = dialog1.findViewById(R.id.proceed);
         selectItem.setOnClickListener(v -> {
-          showProductDialog();
+            showProductDialog();
+        });
+        final Handler handler = new Handler();
+
+        discount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        GetTotal();
+                    }
+                }, 1000);
+
+            }
+        });
+        tax.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        GetTotal();
+                    }
+                }, 1000);
+            }
+        });
+        quantity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        GetTotal();
+                    }
+                }, 1000);
+            }
+        });
+        cancel.setOnClickListener(v -> {
+            dialog1.dismiss();
+        });
+        proceed.setOnClickListener(v -> {
+            InvoiceItem invoiceItem = new InvoiceItem();
+            invoiceItem.setDiscount(discount.getText().toString());
+            invoiceItem.setItemName(selectItem.getText().toString());
+            invoiceItem.setQuantity(quantity.getText().toString());
+            invoiceItem.setRate(rate.getText().toString());
+            invoiceItem.setTotal(totoal.getText().toString());
+            invoiceItems.add(invoiceItem);
+            dialog1.dismiss();
+            setData();
         });
         dialog1.show();
         dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -287,6 +403,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
 //                   AppCache.setCity(districtId);
 //                    customername.setText(products.getDescription());
                     setTextInCustomer(products);
+                    GetTotal();
 //                   issuefromLayout.setError(null);
                     dialog.dismiss();
                 }
@@ -326,9 +443,29 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-    private void setTextInCustomer(Product product){
-        selectItem.setText(product.getDescription());
 
+    private void setTextInCustomer(Product product) {
+        selectItem.setText(product.getDescription());
+        rate.setText(product.getRate());
+    }
+
+    private void GetTotal() {
+
+        Double rates = Double.parseDouble(rate.getText().toString());
+        Double totalAmount = rates;
+
+//        if(!quantity.getText().toString().isEmpty()){
+//            Double quantitys = Double.parseDouble(quantity.getText().toString());
+//            totalAmount = rates * quantitys;
+//        }
+        if (!discount.getText().toString().isEmpty() && !tax.getText().toString().isEmpty() && !quantity.getText().toString().isEmpty()) {
+            Double discounts = Double.parseDouble(discount.getText().toString());
+            Double taxs = Double.parseDouble(tax.getText().toString());
+            Double quantitys = Double.parseDouble(quantity.getText().toString());
+            totalAmount = (totalAmount * quantitys) - (totalAmount * discounts / 100) - (totalAmount * taxs / 100);
+        }
+
+        totoal.setText(totalAmount.toString());
     }
 
 }

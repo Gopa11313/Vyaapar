@@ -98,8 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:imeOptions="actionNext"
-                android:digits="1234567890."
-                android:inputType="text|textNoSuggestions"
+                android:editable="false"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textCursorDrawable="@drawable/cursor_edittext" />
@@ -132,8 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:hint="%"
-                android:digits=""
-                android:imeOptions="actionNext"
+                android:digits="1234567890."
                 android:inputType="number"
                 android:singleLine="true"
                 android:textColor="@color/black"
@@ -161,7 +159,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:hint="%"
-                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:singleLine="true"
                 android:textColor="@color/black"
@@ -174,7 +171,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="iTotal"
+        android:text="Total"
         android:textColor="@color/secondary"
         android:textSize="14dp" />
     <androidx.appcompat.widget.AppCompatEditText
@@ -224,6 +221,7 @@
             app:cardCornerRadius="5dp">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/proceed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/secondary"

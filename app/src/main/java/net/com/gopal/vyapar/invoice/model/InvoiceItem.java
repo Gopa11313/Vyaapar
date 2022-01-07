@@ -2,7 +2,6 @@ package net.com.gopal.vyapar.invoice.model;
 
 public class InvoiceItem {
     private String itemName=null;
-    private String description=null;
     private String discount=null;
     private String quantity=null;
     private String rate=null;
@@ -24,13 +23,6 @@ public class InvoiceItem {
         return rate;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getDiscount() {
         return discount;
