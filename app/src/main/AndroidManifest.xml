@@ -15,7 +15,8 @@
         tools:targetApi="m">
         <activity
             android:name=".invoice.InvoiceActivity"
-            android:exported="false" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".supplier.SupplierActivity"
             android:screenOrientation="portrait"

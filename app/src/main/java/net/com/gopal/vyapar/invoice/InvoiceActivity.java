@@ -72,9 +72,12 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     AppCompatEditText rate;
     AppCompatEditText quantity;
     AppCompatEditText discount;
+    AppCompatTextView total;
     AppCompatEditText tax;
+    AppCompatButton proceed;
     ArrayList<InvoiceItem> invoiceItems = new ArrayList<>();
     InvoiceAdapter invoiceAdapter;
+    Double totalAmount=0.00;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +108,8 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         createCustomer = findViewById(R.id.createCustomer);
         addItem = findViewById(R.id.addItem);
         customername = findViewById(R.id.customername);
+        total = findViewById(R.id.totals);
+        proceed = findViewById(R.id.proceed);
         createCustomer.setOnClickListener(this);
         selectCustomer.setOnClickListener(this);
         pick_date.setOnClickListener(this);
@@ -165,11 +170,14 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.selectCustomer:
                 showCustomerDialog();
                 break;
+            case R.id.proceed:
+                break;
         }
 
     }
     private void setData(){
         if(!invoiceItems.isEmpty()) {
+            total.setText(totalAmount.toString());
              invoiceAdapter = new InvoiceAdapter(invoiceItems, new InvoiceAdapter.ClickCallBack() {
                 @Override
                 public void onClick(Invoice invoice) {
@@ -292,6 +300,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             invoiceItem.setRate(rate.getText().toString());
             invoiceItem.setTotal(totoal.getText().toString());
             invoiceItems.add(invoiceItem);
+            totalAmount=totalAmount+Double.parseDouble(totoal.getText().toString());
             dialog1.dismiss();
             setData();
         });
@@ -306,7 +315,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
 
     private void setIssueFrom(final ArrayList<Customer> customerTypes) {
 
-        SpineerAdapter spineerAdapter = new SpineerAdapter(getApplicationContext(), customerTypes);
+        SpineerAdapter spineerAdapter = new SpineerAdapter(InvoiceActivity.this, customerTypes);
         invoice_type.setAdapter(spineerAdapter);
         invoice_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

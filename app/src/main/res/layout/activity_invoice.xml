@@ -256,13 +256,14 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:layout_weight="2">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Item Name"
+                            android:paddingLeft="2dp"
                             android:textColor="@color/secondary"
                             android:textSize="14dp" />
                     </LinearLayout>
@@ -451,6 +452,7 @@
                         android:layout_weight="1">
 
                         <androidx.appcompat.widget.AppCompatTextView
+                           android:id="@+id/totals"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="3000"
@@ -463,7 +465,25 @@
 
             </LinearLayout>
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        app:cardCornerRadius="5dp"
+        android:elevation="0dp"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/proceed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Proceed"
+            android:textColor="@color/white"
+            android:background="@color/secondary"/>
 
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
