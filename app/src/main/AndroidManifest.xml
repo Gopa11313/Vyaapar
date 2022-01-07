@@ -14,6 +14,10 @@
         tools:replace="icon,allowBackup"
         tools:targetApi="m">
         <activity
+            android:name=".Login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".invoice.InvoiceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
