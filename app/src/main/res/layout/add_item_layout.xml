@@ -149,6 +149,38 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/discountInRupee"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="₹"
+                android:editable="false"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="2">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Tax"
                 android:textColor="@color/secondary"
                 android:textSize="14dp" />
@@ -159,6 +191,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:hint="%"
+                android:digits="1234567890."
+                android:inputType="number"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/cursor_edittext" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="4dp"
+            android:layout_height="0dp"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary"
+                android:textSize="14dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/taxInRuppe"
+                style="@style/CustomEditTextBorderTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="₹"
+                android:editable="false"
                 android:inputType="number"
                 android:singleLine="true"
                 android:textColor="@color/black"

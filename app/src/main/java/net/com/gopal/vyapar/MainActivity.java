@@ -16,14 +16,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Boolean hello=GeneralPref.getIsFirst();
-        if(GeneralPref.getIsFirst()==true) {
-            Intent intent = new Intent(MainActivity.this, SplashActivity.class);
-            startActivity(intent);
-        }
-        else{
-            Intent intent =new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
+        try {
+            GeneralPref generalPref=new GeneralPref(MainActivity.this);
+            Boolean hello = generalPref.getIsFirst();
+            if (generalPref.getIsFirst()) {
+                Intent intent = new Intent(MainActivity.this, SplashActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

@@ -34,9 +34,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()){
             case R.id.submit:
                 if(code_first.getText().toString().equals("123498")){
-                    Intent intent  =new Intent(LoginActivity.this, DashBoardActivity.class);
-                    GeneralPref.setIsFirst(true);
-                    startActivity(intent);
+                    try {
+                        GeneralPref generalPref=new GeneralPref(LoginActivity.this);
+                        Intent intent = new Intent(LoginActivity.this, DashBoardActivity.class);
+                        generalPref.setIsFirst(true);
+                        startActivity(intent);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
                 else{
                     Toast.makeText(LoginActivity.this, "Invalid Code", Toast.LENGTH_SHORT).show();

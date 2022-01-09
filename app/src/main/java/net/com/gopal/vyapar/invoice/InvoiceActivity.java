@@ -74,10 +74,13 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     AppCompatEditText discount;
     AppCompatTextView total;
     AppCompatEditText tax;
+    AppCompatEditText discountInRupee;
+    AppCompatEditText taxInRuppe;
     AppCompatButton proceed;
     ArrayList<InvoiceItem> invoiceItems = new ArrayList<>();
     InvoiceAdapter invoiceAdapter;
-    Double totalAmount=0.00;
+    Double totalAmount = 0.00;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,16 +178,17 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         }
 
     }
-    private void setData(){
-        if(!invoiceItems.isEmpty()) {
+
+    private void setData() {
+        if (!invoiceItems.isEmpty()) {
             total.setText(totalAmount.toString());
-             invoiceAdapter = new InvoiceAdapter(invoiceItems, new InvoiceAdapter.ClickCallBack() {
+            invoiceAdapter = new InvoiceAdapter(invoiceItems, new InvoiceAdapter.ClickCallBack() {
                 @Override
                 public void onClick(Invoice invoice) {
 
                 }
             });
-            LinearLayoutManager layoutManager=new LinearLayoutManager(this);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             invoices.setLayoutManager(layoutManager);
             invoices.setAdapter(invoiceAdapter);
             invoiceAdapter.notifyDataSetChanged();
@@ -212,6 +216,8 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         selectItem = dialog1.findViewById(R.id.selectItem);
         rate = dialog1.findViewById(R.id.rate);
         totoal = dialog1.findViewById(R.id.totoal);
+        taxInRuppe = dialog1.findViewById(R.id.taxInRuppe);
+        discountInRupee = dialog1.findViewById(R.id.discountInRupee);
         quantity = dialog1.findViewById(R.id.quantity);
         discount = dialog1.findViewById(R.id.discount);
         tax = dialog1.findViewById(R.id.tax);
@@ -239,7 +245,9 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void run() {
                         // Do something after 5s = 5000ms
-                        GetTotal();
+                        getDiscount();
+//                        GetTotal();
+
                     }
                 }, 1000);
 
@@ -262,7 +270,9 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void run() {
                         // Do something after 5s = 5000ms
+                        getTax();
                         GetTotal();
+
                     }
                 }, 1000);
             }
@@ -300,7 +310,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             invoiceItem.setRate(rate.getText().toString());
             invoiceItem.setTotal(totoal.getText().toString());
             invoiceItems.add(invoiceItem);
-            totalAmount=totalAmount+Double.parseDouble(totoal.getText().toString());
+            totalAmount = totalAmount + Double.parseDouble(totoal.getText().toString());
             dialog1.dismiss();
             setData();
         });
@@ -311,6 +321,28 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         float density = getResources().getDisplayMetrics().density;
         lp.gravity = Gravity.CENTER;
         dialog1.getWindow().setAttributes(lp);
+    }
+
+    private void getDiscount() {
+        Double total = Double.parseDouble(rate.getText().toString());
+        if (!quantity.getText().toString().isEmpty()) {
+            int qnty = Integer.parseInt(quantity.getText().toString());
+            total = total * qnty;
+        }
+        Double dis = Double.parseDouble(discount.getText().toString());
+        total = total * dis / 100;
+        discountInRupee.setText("₹ " + total.toString());
+    }
+    private void getTax(){
+        Double total = Double.parseDouble(rate.getText().toString());
+        if (!quantity.getText().toString().isEmpty()) {
+            int qnty = Integer.parseInt(quantity.getText().toString());
+            total = total * qnty;
+        }
+        Double tx=Double.parseDouble(tax.getText().toString());
+        total=total*tx/100;
+        taxInRuppe.setText("₹ " + total.toString());
+
     }
 
     private void setIssueFrom(final ArrayList<Customer> customerTypes) {
@@ -472,9 +504,10 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             Double taxs = Double.parseDouble(tax.getText().toString());
             Double quantitys = Double.parseDouble(quantity.getText().toString());
             totalAmount = (totalAmount * quantitys) - (totalAmount * discounts / 100) - (totalAmount * taxs / 100);
+            totoal.setText(totalAmount.toString());
         }
 
-        totoal.setText(totalAmount.toString());
+
     }
 
 }
