@@ -113,6 +113,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         customername = findViewById(R.id.customername);
         total = findViewById(R.id.totals);
         proceed = findViewById(R.id.proceed);
+        proceed.setOnClickListener(this);
         createCustomer.setOnClickListener(this);
         customername.setOnClickListener(this);
         pick_date.setOnClickListener(this);
@@ -174,6 +175,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 showCustomerDialog();
                 break;
             case R.id.proceed:
+                startActivity(new Intent(InvoiceActivity.this,InvoiceViewActivity.class));
                 break;
         }
 

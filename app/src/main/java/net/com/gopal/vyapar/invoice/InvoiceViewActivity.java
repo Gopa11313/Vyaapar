@@ -1,212 +1,188 @@
 package net.com.gopal.vyapar.invoice;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.text.HtmlCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.os.Environment;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.tejpratapsingh.pdfcreator.activity.PDFCreatorActivity;
-import com.tejpratapsingh.pdfcreator.utils.PDFUtil;
-import com.tejpratapsingh.pdfcreator.views.PDFBody;
-import com.tejpratapsingh.pdfcreator.views.PDFFooterView;
-import com.tejpratapsingh.pdfcreator.views.PDFHeaderView;
-import com.tejpratapsingh.pdfcreator.views.PDFTableView;
-import com.tejpratapsingh.pdfcreator.views.basic.PDFHorizontalView;
-import com.tejpratapsingh.pdfcreator.views.basic.PDFImageView;
-import com.tejpratapsingh.pdfcreator.views.basic.PDFLineSeparatorView;
-import com.tejpratapsingh.pdfcreator.views.basic.PDFPageBreakView;
-import com.tejpratapsingh.pdfcreator.views.basic.PDFTextView;
 
 import net.com.gopal.vyapar.R;
 
-import java.io.File;
-import java.util.Locale;
 
-public class InvoiceViewActivity extends PDFCreatorActivity {
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+
+public class InvoiceViewActivity extends AppCompatActivity {
+    // variables for our buttons.
+    Button generatePDFbtn;
+
+    // declaring width and height
+    // for our PDF file.
+    int pageHeight = 842;
+    int pagewidth = 595;
+
+    // creating a bitmap variable
+    // for storing our images
+    Bitmap bmp, scaledbmp;
+    WebView webview;
+    private static final int PERMISSION_REQUEST_CODE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_invoice_view);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
+        webview = (WebView) findViewById(R.id.webview);
+        webview.getSettings().setJavaScriptEnabled(true);
+
+
+        generatePDFbtn = findViewById(R.id.idBtnGeneratePDF);
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+        scaledbmp = Bitmap.createScaledBitmap(bmp, 80, 60, false);
+
+        // below code is used for
+        // checking our permissions.
+        if (checkPermission()) {
+            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+        } else {
+            requestPermission();
         }
 
-        createPDF("test", new PDFUtil.PDFUtilListener() {
+        generatePDFbtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
-            public void pdfGenerationSuccess(File savedPDFFile) {
-                Toast.makeText(InvoiceViewActivity.this, "PDF Created", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void pdfGenerationFailure(Exception exception) {
-                Toast.makeText(InvoiceViewActivity.this, "PDF NOT Created", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                // calling method to
+                // generate our PDF file.
+                generatePDF();
             }
         });
     }
 
-    @Override
-    protected PDFHeaderView getHeaderView(int pageIndex) {
-        PDFHeaderView headerView = new PDFHeaderView(getApplicationContext());
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void generatePDF() {
+        // creating an object variable
+        // for our PDF document.
+        PdfDocument pdfDocument = new PdfDocument();
 
-        PDFHorizontalView horizontalView = new PDFHorizontalView(getApplicationContext());
+        Paint paint = new Paint();
+        Paint title = new Paint();
+        PdfDocument.PageInfo mypageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, 1).create();
 
-        PDFTextView pdfTextView = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.HEADER);
-        SpannableString word = new SpannableString("INVOICE");
-        word.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        pdfTextView.setText(word);
-        pdfTextView.setLayout(new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.MATCH_PARENT, 1));
-        pdfTextView.getView().setGravity(Gravity.CENTER_VERTICAL);
-        pdfTextView.getView().setTypeface(pdfTextView.getView().getTypeface(), Typeface.BOLD);
+        PdfDocument.Page myPage = pdfDocument.startPage(mypageInfo);
 
-        horizontalView.addView(pdfTextView);
+        Canvas canvas = myPage.getCanvas();
 
-        PDFImageView imageView = new PDFImageView(getApplicationContext());
-        LinearLayout.LayoutParams imageLayoutParam = new LinearLayout.LayoutParams(
-                60,
-                60, 0);
-        imageView.setImageScale(ImageView.ScaleType.CENTER_INSIDE);
-        imageView.setImageResource(R.mipmap.ic_launcher);
-        imageLayoutParam.setMargins(0, 0, 10, 0);
-        imageView.setLayout(imageLayoutParam);
+        canvas.drawBitmap(scaledbmp, 50, 40, paint);
 
-        horizontalView.addView(imageView);
+        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
-        headerView.addView(horizontalView);
+        title.setTextSize(13);
 
-        PDFLineSeparatorView lineSeparatorView1 = new PDFLineSeparatorView(getApplicationContext()).setBackgroundColor(Color.WHITE);
-        headerView.addView(lineSeparatorView1);
+        title.setColor(ContextCompat.getColor(this, R.color.black));
+        canvas.drawText("Vyaapar Invoice", 140, 70, title);
+        canvas.drawText("All the invoice are legit/valid.", 140, 90, title);
 
-        return headerView;
+        title.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        title.setColor(ContextCompat.getColor(this, R.color.purple_200));
+        title.setTextSize(15);
+
+        title.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("This is sample document which we have created.", 396, 560, title);
+        pdfDocument.finishPage(myPage);
+
+
+        try {
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            File directory = cw.getDir("pdfDir", Context.MODE_PRIVATE);
+            File file = new File(directory, "UniqueFileName" + "GFG.pdf");
+            FileOutputStream fOut = new FileOutputStream(file);
+            webview.loadUrl(fOut.toString());
+            pdfDocument.writeTo(fOut);
+
+            Toast.makeText(InvoiceViewActivity.this, "PDF file generated successfully.", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            // below line is used
+            // to handle error
+            e.printStackTrace();
+        }
+        // after storing our pdf to that
+        // location we are closing our PDF file.
+        pdfDocument.close();
+    }
+
+    private boolean checkPermission() {
+        // checking of permissions.
+        int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permission2 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+        return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        // requesting permissions if not provided.
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
     @Override
-    protected PDFBody getBodyViews() {
-        PDFBody pdfBody = new PDFBody();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
 
-        PDFTextView pdfCompanyNameView = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.H3);
-        pdfCompanyNameView.setText("Company Name");
-        pdfBody.addView(pdfCompanyNameView);
-        PDFLineSeparatorView lineSeparatorView1 = new PDFLineSeparatorView(getApplicationContext()).setBackgroundColor(Color.WHITE);
-        pdfBody.addView(lineSeparatorView1);
-        PDFTextView pdfAddressView = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.P);
-        pdfAddressView.setText("Address Line 1\nCity, State - 123456");
-        pdfBody.addView(pdfAddressView);
+                // after requesting permissions we are showing
+                // users a toast message of permission granted.
+                boolean writeStorage = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean readStorage = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
-        PDFLineSeparatorView lineSeparatorView2 = new PDFLineSeparatorView(getApplicationContext()).setBackgroundColor(Color.WHITE);
-        lineSeparatorView2.setLayout(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                8, 0));
-        pdfBody.addView(lineSeparatorView2);
-
-        PDFLineSeparatorView lineSeparatorView3 = new PDFLineSeparatorView(getApplicationContext()).setBackgroundColor(Color.WHITE);
-        pdfBody.addView(lineSeparatorView3);
-
-        int[] widthPercent = {20, 20, 20, 40}; // Sum should be equal to 100%
-        String[] textInTable = {"1", "2", "3", "4"};
-        PDFTextView pdfTableTitleView = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.P);
-        pdfTableTitleView.setText("Table Example");
-        pdfBody.addView(pdfTableTitleView);
-
-        final PDFPageBreakView pdfPageBreakView = new PDFPageBreakView(getApplicationContext());
-        pdfBody.addView(pdfPageBreakView);
-
-        PDFTableView.PDFTableRowView tableHeader = new PDFTableView.PDFTableRowView(getApplicationContext());
-        for (String s : textInTable) {
-            PDFTextView pdfTextView = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.P);
-            pdfTextView.setText("Header Title: " + s);
-            tableHeader.addToRow(pdfTextView);
-        }
-
-        PDFTableView.PDFTableRowView tableRowView1 = new PDFTableView.PDFTableRowView(getApplicationContext());
-        for (String s : textInTable) {
-            PDFTextView pdfTextView = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.P);
-            pdfTextView.setText("Row 1 : " + s);
-            tableRowView1.addToRow(pdfTextView);
-        }
-
-        PDFTableView tableView = new PDFTableView(getApplicationContext(), tableHeader, tableRowView1);
-
-        for (int i = 0; i < 40; i++) {
-            // Create 10 rows
-            PDFTableView.PDFTableRowView tableRowView = new PDFTableView.PDFTableRowView(getApplicationContext());
-            for (String s : textInTable) {
-                PDFTextView pdfTextView = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.P);
-                pdfTextView.setText("Row " + (i + 2) + ": " + s);
-                tableRowView.addToRow(pdfTextView);
+                if (writeStorage && readStorage) {
+                    Toast.makeText(this, "Permission Granted..", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Permission Denined.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
-            tableView.addRow(tableRowView);
         }
-        tableView.setColumnWidth(widthPercent);
-        pdfBody.addView(tableView);
-
-        PDFLineSeparatorView lineSeparatorView4 = new PDFLineSeparatorView(getApplicationContext()).setBackgroundColor(Color.BLACK);
-        pdfBody.addView(lineSeparatorView4);
-
-        PDFTextView pdfIconLicenseView = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.H3);
-        Spanned icon8Link = HtmlCompat.fromHtml("Icon from <a href='https://icons8.com'>https://icons8.com</a>", HtmlCompat.FROM_HTML_MODE_LEGACY);
-        pdfIconLicenseView.getView().setText(icon8Link);
-        pdfBody.addView(pdfIconLicenseView);
-
-        return pdfBody;
     }
 
-    @Override
-    protected PDFFooterView getFooterView(int pageIndex) {
-        PDFFooterView footerView = new PDFFooterView(getApplicationContext());
+    private void viewPdf(String file, String directory) {
 
-        PDFTextView pdfTextViewPage = new PDFTextView(getApplicationContext(), PDFTextView.PDF_TEXT_SIZE.SMALL);
-        pdfTextViewPage.setText(String.format(Locale.getDefault(), "Page: %d", pageIndex + 1));
-        pdfTextViewPage.setLayout(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT, 0));
-        pdfTextViewPage.getView().setGravity(Gravity.CENTER_HORIZONTAL);
+        File pdfFile = new File(Environment.getExternalStorageDirectory() + "/" + directory + "/" + file);
+        Uri path = Uri.fromFile(pdfFile);
 
-        footerView.addView(pdfTextViewPage);
+        // Setting the intent for pdf reader
+        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+        pdfIntent.setDataAndType(path, "application/pdf");
+        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        return footerView;
-    }
-
-    @Nullable
-    @Override
-    protected PDFImageView getWatermarkView(int forPage) {
-        PDFImageView pdfImageView = new PDFImageView(getApplicationContext());
-        FrameLayout.LayoutParams childLayoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                200, Gravity.CENTER);
-        pdfImageView.setLayout(childLayoutParams);
-
-        pdfImageView.setImageResource(R.drawable.logo);
-        pdfImageView.setImageScale(ImageView.ScaleType.FIT_CENTER);
-        pdfImageView.getView().setAlpha(0.3F);
-
-        return pdfImageView;
-    }
-
-    @Override
-    protected void onNextClicked(final File savedPDFFile) {
-        Uri pdfUri = Uri.fromFile(savedPDFFile);
-
-        Intent intentPdfViewer = new Intent(InvoiceViewActivity.this, PdfViewerExampleActivity.class);
-        intentPdfViewer.putExtra(PdfViewerExampleActivity.PDF_FILE_URI, pdfUri);
-
-        startActivity(intentPdfViewer);
+        try {
+            startActivity(pdfIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(InvoiceViewActivity.this, "Can't read pdf file", Toast.LENGTH_SHORT).show();
+        }
     }
 }
