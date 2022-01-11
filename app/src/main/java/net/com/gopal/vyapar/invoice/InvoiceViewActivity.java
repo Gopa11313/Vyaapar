@@ -87,14 +87,13 @@ public class InvoiceViewActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void generatePDF() {
-        // creating an object variable
-        // for our PDF document.
         PdfDocument pdfDocument = new PdfDocument();
-
         Paint paint = new Paint();
         Paint title = new Paint();
+        Paint titleSide = new Paint();
         Paint title1 = new Paint();
         Paint bill = new Paint();
+        Paint billHeader = new Paint();
         PdfDocument.PageInfo mypageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, 1).create();
 
         PdfDocument.Page myPage = pdfDocument.startPage(mypageInfo);
@@ -108,25 +107,43 @@ public class InvoiceViewActivity extends AppCompatActivity {
 
         title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         title.setTextSize(11);
+        titleSide.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        titleSide.setTextSize(11);
 
         bill.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         bill.setTextSize(10);
-        bill.setColor(ContextCompat.getColor(this, R.color.secondary));
+        bill.setColor(ContextCompat.getColor(this, R.color.gray200));
 
+        billHeader.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        billHeader.setTextSize(10);
+        billHeader.setColor(ContextCompat.getColor(this, R.color.secondary));
+
+        Rect r = new Rect();
+        r.left = 130;
+        r.top = 208;
+        r.right = 165 + 300;
+        r.bottom = 220 + 3+(5*15);
+
+        Rect r1 = new Rect();
+        r1.left = 130;
+        r1.top = 208;
+        r1.right = 165 + 300;
+        r1.bottom = 220 + 3;
+        canvas.drawRect(r,bill);
+        canvas.drawRect(r1,billHeader);
         title.setColor(ContextCompat.getColor(this, R.color.black));
         title1.setColor(ContextCompat.getColor(this, R.color.secondary));
         canvas.drawText("Vyaapar Invoice", 250, 100, title1);
-//        canvas.drawText("All the invoice are legit/valid.", 140, 90, title);
         canvas.drawText("Bill To:", 60, 130, title);
         canvas.drawText("Gopal Thapa", 60, 145, title);
         canvas.drawText("Invoice Type: Cash", 60, 160, title);
 
+        titleSide.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Invoice Code:123", 460, 130, titleSide);
+        canvas.drawText("Date:2020/12/12", 460, 145, titleSide);
+        canvas.drawText("Tin No. :1200", 460, 160, titleSide);
 
-        canvas.drawText("Invoice Code:123", 460, 130, title);
-        canvas.drawText("Date:2020/12/12", 460, 145, title);
-        canvas.drawText("Tin No. :1200", 460, 160, title);
-        Rect r = new Rect(10, 10, 200, 100);
-        canvas.drawRect(r,bill);
+
         canvas.drawText("S.N", 150, 220, title);
         canvas.drawText("Item", 190, 220, title);
         canvas.drawText("Discount", 260, 220, title);
@@ -135,25 +152,21 @@ public class InvoiceViewActivity extends AppCompatActivity {
         canvas.drawText("Total", 410, 220, title);
         int incresed = 15;
         for (int i = 0; i < 5; i++) {
-            canvas.drawText(""+(i+1), 150, 220+ incresed, bill);
-            canvas.drawText("Pants", 190, 220 + incresed, bill);
-            canvas.drawText("20%", 260, 220 + incresed, bill);
-            canvas.drawText("100", 320, 220 + incresed, bill);
-            canvas.drawText("300", 370, 220 + incresed, bill);
-            canvas.drawText("12000", 410, 220 + incresed, bill);
+            canvas.drawText(""+(i+1), 150, 220+ incresed, title);
+            canvas.drawText("Pants", 190, 220 + incresed, title);
+            canvas.drawText("20%", 260, 220 + incresed, title);
+            canvas.drawText("100", 320, 220 + incresed, title);
+            canvas.drawText("300", 370, 220 + incresed, title);
+            canvas.drawText("12000", 410, 220 + incresed, title);
             if(i==4){
                 canvas.drawText("12000", 410, 220 + incresed+15, title);
-                canvas.drawText("Authorized Signatory", 360, 270 + incresed+15, title);
+                canvas.drawText("Authorized Signatory", 360, 350 + incresed+15, title);
             }
             incresed = incresed + 15;
         }
+//bottom
+        canvas.drawText("Thank your for using Vyaapar.", 60, 750, title1);
 
-        title.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        title.setColor(ContextCompat.getColor(this, R.color.purple_200));
-        title.setTextSize(15);
-
-        title.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("This is sample document which we have created.", 396, 560, title);
         pdfDocument.finishPage(myPage);
 
 
@@ -167,24 +180,18 @@ public class InvoiceViewActivity extends AppCompatActivity {
 
             Toast.makeText(InvoiceViewActivity.this, "PDF file generated successfully.", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            // below line is used
-            // to handle error
             e.printStackTrace();
         }
-        // after storing our pdf to that
-        // location we are closing our PDF file.
         pdfDocument.close();
     }
 
     private boolean checkPermission() {
-        // checking of permissions.
         int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int permission2 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
         return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
-        // requesting permissions if not provided.
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
