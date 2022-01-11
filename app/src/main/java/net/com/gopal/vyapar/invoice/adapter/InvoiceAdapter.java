@@ -35,8 +35,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     @Override
     public void onBindViewHolder(@NonNull @NotNull InvoiceViewHolder holder, int position) {
         InvoiceItem invoice = invoiceItem.get(position);
-        holder.description.setText("");
-        holder.discount.setText(invoice.getDiscount());
+        holder.tax.setText(invoice.getTax());
         holder.name.setText(invoice.getItemName());
         holder.qty.setText(invoice.getQuantity());
         holder.rate.setText(invoice.getRate());
@@ -49,13 +48,12 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     }
 
     public class InvoiceViewHolder extends RecyclerView.ViewHolder {
-        private AppCompatTextView name, description, discount, qty, rate, total;
+        private AppCompatTextView name, tax, qty, rate, total;
 
         public InvoiceViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             name=itemView.findViewById(R.id.name);
-            description=itemView.findViewById(R.id.description);
-            discount=itemView.findViewById(R.id.discount);
+            tax=itemView.findViewById(R.id.tax);
             qty=itemView.findViewById(R.id.qty);
             rate=itemView.findViewById(R.id.rate);
             total=itemView.findViewById(R.id.total);

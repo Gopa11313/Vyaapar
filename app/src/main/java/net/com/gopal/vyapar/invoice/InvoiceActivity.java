@@ -32,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import net.com.gopal.vyapar.R;
 import net.com.gopal.vyapar.company.CompanyActivity;
 import net.com.gopal.vyapar.customer.CustomerActivity;
@@ -80,6 +82,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<InvoiceItem> invoiceItems = new ArrayList<>();
     InvoiceAdapter invoiceAdapter;
     Double totalAmount = 0.00;
+    String selectedItem = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +178,25 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 showCustomerDialog();
                 break;
             case R.id.proceed:
-                startActivity(new Intent(InvoiceActivity.this,InvoiceViewActivity.class));
+                try {
+                    Invoice invoice = new Invoice();
+                    Gson gson = new Gson();
+                    String data = gson.toJson(invoiceItems);
+                    invoice.setInvoiceItem(data);
+                    invoice.setInvoiceCode(invoiceCode.getText().toString());
+
+                    invoice.setInvoiceType("Cash");
+                    invoice.setCustomerName(customername.getText().toString());
+                    invoice.setDate(pick_date.getText().toString());
+                    invoice.setTinNo(tin_Number.getText().toString());
+                    invoice.setTotal(total.getText().toString());
+                    String invoiceData = gson.toJson(invoice);
+                    Intent intent1 = new Intent(InvoiceActivity.this, InvoiceViewActivity.class);
+                    intent1.putExtra("data", invoiceData);
+                    startActivity(intent1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
 
@@ -311,6 +332,8 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             invoiceItem.setQuantity(quantity.getText().toString());
             invoiceItem.setRate(rate.getText().toString());
             invoiceItem.setTotal(totoal.getText().toString());
+            String tex = taxInRuppe.getText().toString().replace("₹", "");
+            invoiceItem.setTax(tex.replace(" ", ""));
             invoiceItems.add(invoiceItem);
             totalAmount = totalAmount + Double.parseDouble(totoal.getText().toString());
             dialog1.dismiss();
@@ -335,14 +358,15 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         total = total * dis / 100;
         discountInRupee.setText("₹ " + total.toString());
     }
-    private void getTax(){
+
+    private void getTax() {
         Double total = Double.parseDouble(rate.getText().toString());
         if (!quantity.getText().toString().isEmpty()) {
             int qnty = Integer.parseInt(quantity.getText().toString());
             total = total * qnty;
         }
-        Double tx=Double.parseDouble(tax.getText().toString());
-        total=total*tx/100;
+        Double tx = Double.parseDouble(tax.getText().toString());
+        total = total * tx / 100;
         taxInRuppe.setText("₹ " + total.toString());
 
     }
@@ -354,7 +378,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         invoice_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                issueFromId = issueFrom.get(i).getId();
+//                String selectedItem="" = invoice_type.get(i).getId();
 //                issuefromLayout.setError(null);
             }
 

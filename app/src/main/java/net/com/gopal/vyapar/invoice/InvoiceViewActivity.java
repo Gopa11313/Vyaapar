@@ -21,6 +21,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,27 +32,30 @@ import android.widget.Toast;
 
 
 import net.com.gopal.vyapar.R;
+import net.com.gopal.vyapar.invoice.model.Invoice;
+import net.com.gopal.vyapar.invoice.model.InvoiceItem;
 
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class InvoiceViewActivity extends AppCompatActivity {
-    // variables for our buttons.
     Button generatePDFbtn;
 
-    // declaring width and height
-    // for our PDF file.
     int pageHeight = 842;
     int pagewidth = 595;
 
-    // creating a bitmap variable
-    // for storing our images
     Bitmap bmp, scaledbmp;
     WebView webview;
     private static final int PERMISSION_REQUEST_CODE = 200;
+    ArrayList<InvoiceItem> invoiceItems = new ArrayList<>();
+    Invoice invoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,42 @@ public class InvoiceViewActivity extends AppCompatActivity {
         webview = (WebView) findViewById(R.id.webview);
         webview.getSettings().setJavaScriptEnabled(true);
 
-
+        Intent intentData = getIntent();
+        String data = intentData.getStringExtra("data");
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            invoice=new Invoice();
+            String customerName = jsonObject.getString("customerName");
+            String date = jsonObject.getString("date");
+            String invoiceCode = jsonObject.getString("invoiceCode");
+            String invoice_id = jsonObject.getString("invoice_id");
+            String tinNo = jsonObject.getString("tinNo");
+            String total = jsonObject.getString("total");
+            String invoiceType = jsonObject.getString("invoiceType");
+//            String total = jsonObject.getString("total");
+            String hb = jsonObject.getString("invoiceItem");
+            invoice.setInvoiceCode(invoiceCode);
+            invoice.setCustomerName(customerName);
+            invoice.setDate(date);
+            invoice.setTinNo(tinNo);
+            invoice.setInvoice_id(Integer.parseInt(invoiceCode));
+            invoice.setTotal(total);
+            invoice.setInvoiceType(invoiceType);
+//            invoice.setInvoiceType();
+            JSONArray jsonArray = new JSONArray(hb);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                InvoiceItem invoiceItem = new InvoiceItem();
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                invoiceItem.setTax(jsonObject1.getString("tax"));
+                invoiceItem.setItemName(jsonObject1.getString("itemName"));
+                invoiceItem.setDiscount(jsonObject1.getString("discount"));
+                invoiceItem.setRate(jsonObject1.getString("rate"));
+                invoiceItem.setTotal(jsonObject1.getString("total"));
+                invoiceItems.add(invoiceItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         generatePDFbtn = findViewById(R.id.idBtnGeneratePDF);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
         scaledbmp = Bitmap.createScaledBitmap(bmp, 80, 60, false);
@@ -122,26 +161,26 @@ public class InvoiceViewActivity extends AppCompatActivity {
         r.left = 130;
         r.top = 208;
         r.right = 165 + 300;
-        r.bottom = 220 + 3+(5*15);
+        r.bottom = 220 + 3 + (invoiceItems.size() * 15);
 
         Rect r1 = new Rect();
         r1.left = 130;
         r1.top = 208;
         r1.right = 165 + 300;
         r1.bottom = 220 + 3;
-        canvas.drawRect(r,bill);
-        canvas.drawRect(r1,billHeader);
+        canvas.drawRect(r, bill);
+        canvas.drawRect(r1, billHeader);
         title.setColor(ContextCompat.getColor(this, R.color.black));
         title1.setColor(ContextCompat.getColor(this, R.color.secondary));
         canvas.drawText("Vyaapar Invoice", 250, 100, title1);
         canvas.drawText("Bill To:", 60, 130, title);
-        canvas.drawText("Gopal Thapa", 60, 145, title);
+        canvas.drawText(invoice.customerName, 60, 145, title);
         canvas.drawText("Invoice Type: Cash", 60, 160, title);
 
         titleSide.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Invoice Code:123", 460, 130, titleSide);
-        canvas.drawText("Date:2020/12/12", 460, 145, titleSide);
-        canvas.drawText("Tin No. :1200", 460, 160, titleSide);
+        canvas.drawText("Invoice Code:"+invoice.getInvoiceCode(), 460, 130, titleSide);
+        canvas.drawText(invoice.getDate(), 460, 145, titleSide);
+        canvas.drawText("Tin No. :"+invoice.getTinNo(), 460, 160, titleSide);
 
 
         canvas.drawText("S.N", 150, 220, title);
@@ -151,16 +190,16 @@ public class InvoiceViewActivity extends AppCompatActivity {
         canvas.drawText("Tax", 370, 220, title);
         canvas.drawText("Total", 410, 220, title);
         int incresed = 15;
-        for (int i = 0; i < 5; i++) {
-            canvas.drawText(""+(i+1), 150, 220+ incresed, title);
-            canvas.drawText("Pants", 190, 220 + incresed, title);
-            canvas.drawText("20%", 260, 220 + incresed, title);
-            canvas.drawText("100", 320, 220 + incresed, title);
-            canvas.drawText("300", 370, 220 + incresed, title);
-            canvas.drawText("12000", 410, 220 + incresed, title);
-            if(i==4){
-                canvas.drawText("12000", 410, 220 + incresed+15, title);
-                canvas.drawText("Authorized Signatory", 360, 350 + incresed+15, title);
+        for (int i = 0; i < invoiceItems.size(); i++) {
+            canvas.drawText("" + (i + 1), 150, 220 + incresed, title);
+            canvas.drawText(invoiceItems.get(i).getItemName(), 190, 220 + incresed, title);
+            canvas.drawText(invoiceItems.get(i).getDiscount(), 260, 220 + incresed, title);
+            canvas.drawText(invoiceItems.get(i).getRate(), 320, 220 + incresed, title);
+            canvas.drawText(invoiceItems.get(i).getTax(), 370, 220 + incresed, title);
+            canvas.drawText(invoiceItems.get(i).getTotal(), 410, 220 + incresed, title);
+            if (i == invoiceItems.size()-1) {
+                canvas.drawText(invoice.getTotal(), 410, 220 + incresed + 15, title);
+                canvas.drawText("Authorized Signatory", 360, 350 + incresed + 15, title);
             }
             incresed = incresed + 15;
         }
@@ -179,6 +218,20 @@ public class InvoiceViewActivity extends AppCompatActivity {
             pdfDocument.writeTo(fOut);
 
             Toast.makeText(InvoiceViewActivity.this, "PDF file generated successfully.", Toast.LENGTH_SHORT).show();
+//            File directory1 = cw.getDir("pdfDir", Context.MODE_WORLD_READABLE);
+//            File file1 = new File(directory1, "UniqueFileName" + "GFG.pdf");
+//            FileOutputStream fOut1 = new FileOutputStream(file1);
+////            File pdfFile = new File(Environment.getExternalStorageDirectory() + "UniqueFileName" + "GFG.pdf");  // -> filename = maven.pdf
+//            Uri path = Uri.fromFile(file);
+//            Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+//            pdfIntent.setDataAndType(path, "application/pdf");
+//            pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+//            try {
+//                startActivity(pdfIntent);
+//            } catch (ActivityNotFoundException e) {
+//                Toast.makeText(InvoiceViewActivity.this, "No Application available to view PDF", Toast.LENGTH_SHORT).show();
+//            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -216,20 +269,4 @@ public class InvoiceViewActivity extends AppCompatActivity {
         }
     }
 
-    private void viewPdf(String file, String directory) {
-
-        File pdfFile = new File(Environment.getExternalStorageDirectory() + "/" + directory + "/" + file);
-        Uri path = Uri.fromFile(pdfFile);
-
-        // Setting the intent for pdf reader
-        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-        pdfIntent.setDataAndType(path, "application/pdf");
-        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        try {
-            startActivity(pdfIntent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(InvoiceViewActivity.this, "Can't read pdf file", Toast.LENGTH_SHORT).show();
-        }
-    }
 }

@@ -6,6 +6,7 @@ public class InvoiceItem {
     private String quantity=null;
     private String rate=null;
     private String total=null;
+    private String tax=null;
 
     public void setTotal(String total) {
         this.total = total;
@@ -46,5 +47,13 @@ public class InvoiceItem {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getTax() {
+        return tax;
+    }
+
+    public void setTax(String tax) {
+        this.tax = tax;
     }
 }
