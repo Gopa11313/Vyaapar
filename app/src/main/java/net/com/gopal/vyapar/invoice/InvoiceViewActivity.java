@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
@@ -92,6 +93,8 @@ public class InvoiceViewActivity extends AppCompatActivity {
 
         Paint paint = new Paint();
         Paint title = new Paint();
+        Paint title1 = new Paint();
+        Paint bill = new Paint();
         PdfDocument.PageInfo mypageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, 1).create();
 
         PdfDocument.Page myPage = pdfDocument.startPage(mypageInfo);
@@ -100,13 +103,50 @@ public class InvoiceViewActivity extends AppCompatActivity {
 
         canvas.drawBitmap(scaledbmp, 50, 40, paint);
 
-        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        title1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        title1.setTextSize(14);
 
-        title.setTextSize(13);
+        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        title.setTextSize(11);
+
+        bill.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        bill.setTextSize(10);
+        bill.setColor(ContextCompat.getColor(this, R.color.secondary));
 
         title.setColor(ContextCompat.getColor(this, R.color.black));
-        canvas.drawText("Vyaapar Invoice", 140, 70, title);
-        canvas.drawText("All the invoice are legit/valid.", 140, 90, title);
+        title1.setColor(ContextCompat.getColor(this, R.color.secondary));
+        canvas.drawText("Vyaapar Invoice", 250, 100, title1);
+//        canvas.drawText("All the invoice are legit/valid.", 140, 90, title);
+        canvas.drawText("Bill To:", 60, 130, title);
+        canvas.drawText("Gopal Thapa", 60, 145, title);
+        canvas.drawText("Invoice Type: Cash", 60, 160, title);
+
+
+        canvas.drawText("Invoice Code:123", 460, 130, title);
+        canvas.drawText("Date:2020/12/12", 460, 145, title);
+        canvas.drawText("Tin No. :1200", 460, 160, title);
+        Rect r = new Rect(10, 10, 200, 100);
+        canvas.drawRect(r,bill);
+        canvas.drawText("S.N", 150, 220, title);
+        canvas.drawText("Item", 190, 220, title);
+        canvas.drawText("Discount", 260, 220, title);
+        canvas.drawText("Rate", 320, 220, title);
+        canvas.drawText("Tax", 370, 220, title);
+        canvas.drawText("Total", 410, 220, title);
+        int incresed = 15;
+        for (int i = 0; i < 5; i++) {
+            canvas.drawText(""+(i+1), 150, 220+ incresed, bill);
+            canvas.drawText("Pants", 190, 220 + incresed, bill);
+            canvas.drawText("20%", 260, 220 + incresed, bill);
+            canvas.drawText("100", 320, 220 + incresed, bill);
+            canvas.drawText("300", 370, 220 + incresed, bill);
+            canvas.drawText("12000", 410, 220 + incresed, bill);
+            if(i==4){
+                canvas.drawText("12000", 410, 220 + incresed+15, title);
+                canvas.drawText("Authorized Signatory", 360, 270 + incresed+15, title);
+            }
+            incresed = incresed + 15;
+        }
 
         title.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         title.setColor(ContextCompat.getColor(this, R.color.purple_200));
