@@ -65,7 +65,10 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:1.0.0"
     kapt "android.arch.persistence.room:compiler:1.0.0"
     implementation 'com.google.code.gson:gson:2.8.7'
-    implementation 'com.epson.eposprint:1.9.0'
+    implementation 'com.github.DantSu:ESCPOS-ThermalPrinter-Android:3.0.1'
+    implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.karumi:dexter:6.2.3'
+//    implementation 'com.epson.eposprint:1.9.0'
 //    implementation 'com.github.tejpratap46:PDFCreatorAndroid:3.0.2'
 //    implementation 'com.github.wwdablu:SimplyPDF:2.0.0'
 }

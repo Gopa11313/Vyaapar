@@ -3,6 +3,7 @@ package net.com.gopal.vyapar.invoice;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -25,15 +26,35 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
+
 import net.com.gopal.vyapar.R;
+import net.com.gopal.vyapar.dashboard.DashBoardActivity;
 import net.com.gopal.vyapar.invoice.model.Invoice;
 import net.com.gopal.vyapar.invoice.model.InvoiceItem;
+import net.com.gopal.vyapar.invoice.pdf.Common;
+import net.com.gopal.vyapar.invoice.pdf.pdfDocumentAdapter;
 
 
 import org.json.JSONArray;
@@ -46,30 +67,49 @@ import java.util.ArrayList;
 
 
 public class InvoiceViewActivity extends AppCompatActivity {
-    Button generatePDFbtn;
-
+    Button generatePDFbtns;
+    private static final int PERMISSION_REQUEST_CODE = 200;
     int pageHeight = 842;
     int pagewidth = 595;
-
+    Toolbar toolbaruni;
+    public TextView title;
     Bitmap bmp, scaledbmp;
     WebView webview;
-    private static final int PERMISSION_REQUEST_CODE = 200;
     ArrayList<InvoiceItem> invoiceItems = new ArrayList<>();
     Invoice invoice;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoice_view);
-
-        webview = (WebView) findViewById(R.id.webview);
-        webview.getSettings().setJavaScriptEnabled(true);
+        toolbaruni = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbaruni);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setTitleToolbar("Invoice Create");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbaruni.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        if (checkPermission()) {
+            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+        } else {
+            requestPermission();
+        }
+        generatePDFbtns = findViewById(R.id.idBtnGeneratePDF);
+        generatePDFbtns.setOnClickListener(v -> {
+            createPdf(Common.getAppPath(InvoiceViewActivity.this) + "test_pdf.pdf");
+        });
 
         Intent intentData = getIntent();
         String data = intentData.getStringExtra("data");
         try {
             JSONObject jsonObject = new JSONObject(data);
-            invoice=new Invoice();
+            invoice = new Invoice();
             String customerName = jsonObject.getString("customerName");
             String date = jsonObject.getString("date");
             String invoiceCode = jsonObject.getString("invoiceCode");
@@ -94,6 +134,7 @@ public class InvoiceViewActivity extends AppCompatActivity {
                 invoiceItem.setTax(jsonObject1.getString("tax"));
                 invoiceItem.setItemName(jsonObject1.getString("itemName"));
                 invoiceItem.setDiscount(jsonObject1.getString("discount"));
+                invoiceItem.setQuantity(jsonObject1.getString("quantity"));
                 invoiceItem.setRate(jsonObject1.getString("rate"));
                 invoiceItem.setTotal(jsonObject1.getString("total"));
                 invoiceItems.add(invoiceItem);
@@ -101,141 +142,122 @@ public class InvoiceViewActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        generatePDFbtn = findViewById(R.id.idBtnGeneratePDF);
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
-        scaledbmp = Bitmap.createScaledBitmap(bmp, 80, 60, false);
-
-        // below code is used for
-        // checking our permissions.
-        if (checkPermission()) {
-            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-        } else {
-            requestPermission();
-        }
-
-        generatePDFbtn.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View v) {
-                // calling method to
-                // generate our PDF file.
-                generatePDF();
-            }
-        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void generatePDF() {
-        PdfDocument pdfDocument = new PdfDocument();
-        Paint paint = new Paint();
-        Paint title = new Paint();
-        Paint titleSide = new Paint();
-        Paint title1 = new Paint();
-        Paint bill = new Paint();
-        Paint billHeader = new Paint();
-        PdfDocument.PageInfo mypageInfo = new PdfDocument.PageInfo.Builder(pagewidth, pageHeight, 1).create();
-
-        PdfDocument.Page myPage = pdfDocument.startPage(mypageInfo);
-
-        Canvas canvas = myPage.getCanvas();
-
-        canvas.drawBitmap(scaledbmp, 50, 40, paint);
-
-        title1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        title1.setTextSize(14);
-
-        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        title.setTextSize(11);
-        titleSide.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        titleSide.setTextSize(11);
-
-        bill.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        bill.setTextSize(10);
-        bill.setColor(ContextCompat.getColor(this, R.color.gray200));
-
-        billHeader.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        billHeader.setTextSize(10);
-        billHeader.setColor(ContextCompat.getColor(this, R.color.secondary));
-
-        Rect r = new Rect();
-        r.left = 130;
-        r.top = 208;
-        r.right = 165 + 300;
-        r.bottom = 220 + 3 + (invoiceItems.size() * 15);
-
-        Rect r1 = new Rect();
-        r1.left = 130;
-        r1.top = 208;
-        r1.right = 165 + 300;
-        r1.bottom = 220 + 3;
-        canvas.drawRect(r, bill);
-        canvas.drawRect(r1, billHeader);
-        title.setColor(ContextCompat.getColor(this, R.color.black));
-        title1.setColor(ContextCompat.getColor(this, R.color.secondary));
-        canvas.drawText("Vyaapar Invoice", 250, 100, title1);
-        canvas.drawText("Bill To:", 60, 130, title);
-        canvas.drawText(invoice.customerName, 60, 145, title);
-        canvas.drawText("Invoice Type: Cash", 60, 160, title);
-
-        titleSide.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Invoice Code:"+invoice.getInvoiceCode(), 460, 130, titleSide);
-        canvas.drawText(invoice.getDate(), 460, 145, titleSide);
-        canvas.drawText("Tin No. :"+invoice.getTinNo(), 460, 160, titleSide);
-
-
-        canvas.drawText("S.N", 150, 220, title);
-        canvas.drawText("Item", 190, 220, title);
-        canvas.drawText("Discount", 260, 220, title);
-        canvas.drawText("Rate", 320, 220, title);
-        canvas.drawText("Tax", 370, 220, title);
-        canvas.drawText("Total", 410, 220, title);
-        int incresed = 15;
-        for (int i = 0; i < invoiceItems.size(); i++) {
-            canvas.drawText("" + (i + 1), 150, 220 + incresed, title);
-            canvas.drawText(invoiceItems.get(i).getItemName(), 190, 220 + incresed, title);
-            canvas.drawText(invoiceItems.get(i).getDiscount(), 260, 220 + incresed, title);
-            canvas.drawText(invoiceItems.get(i).getRate(), 320, 220 + incresed, title);
-            canvas.drawText(invoiceItems.get(i).getTax(), 370, 220 + incresed, title);
-            canvas.drawText(invoiceItems.get(i).getTotal(), 410, 220 + incresed, title);
-            if (i == invoiceItems.size()-1) {
-                canvas.drawText(invoice.getTotal(), 410, 220 + incresed + 15, title);
-                canvas.drawText("Authorized Signatory", 360, 350 + incresed + 15, title);
-            }
-            incresed = incresed + 15;
+    private void createPdf(String path) {
+        if (new File(path).exists()) {
+            new File(path).delete();
         }
-//bottom
-        canvas.drawText("Thank your for using Vyaapar.", 60, 750, title1);
-
-        pdfDocument.finishPage(myPage);
-
-
         try {
-            ContextWrapper cw = new ContextWrapper(getApplicationContext());
-            File directory = cw.getDir("pdfDir", Context.MODE_PRIVATE);
-            File file = new File(directory, "UniqueFileName" + "GFG.pdf");
-            FileOutputStream fOut = new FileOutputStream(file);
-            webview.loadUrl(fOut.toString());
-            pdfDocument.writeTo(fOut);
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(path));
+            document.open();
 
-            Toast.makeText(InvoiceViewActivity.this, "PDF file generated successfully.", Toast.LENGTH_SHORT).show();
-//            File directory1 = cw.getDir("pdfDir", Context.MODE_WORLD_READABLE);
-//            File file1 = new File(directory1, "UniqueFileName" + "GFG.pdf");
-//            FileOutputStream fOut1 = new FileOutputStream(file1);
-////            File pdfFile = new File(Environment.getExternalStorageDirectory() + "UniqueFileName" + "GFG.pdf");  // -> filename = maven.pdf
-//            Uri path = Uri.fromFile(file);
-//            Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-//            pdfIntent.setDataAndType(path, "application/pdf");
-//            pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            document.setPageSize(PageSize.A4);
+            document.addCreationDate();
+            document.addAuthor("Gopal");
+            document.addCreator("Gopal Thapa");
+            BaseColor colorAgent = new BaseColor(0, 153, 204, 255);
+            float fontsize = 20.0f;
+            float valueFontSize = 16.0f;
 
-//            try {
-//                startActivity(pdfIntent);
-//            } catch (ActivityNotFoundException e) {
-//                Toast.makeText(InvoiceViewActivity.this, "No Application available to view PDF", Toast.LENGTH_SHORT).show();
-//            }
-        } catch (IOException e) {
+            BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
+            Font titleFont = new Font(baseFont, 16.0f, Font.NORMAL, BaseColor.BLACK);
+            addNewItem(document, "Trade In Pocket", Element.ALIGN_CENTER, titleFont);
+
+            Font orderNumberFont = new Font(baseFont, valueFontSize, Font.NORMAL, colorAgent);
+            addNewItem(document, "Invoice No", Element.ALIGN_CENTER, orderNumberFont);
+
+            Font orderNumberValueFont = new Font(baseFont, valueFontSize, Font.NORMAL, BaseColor.BLACK);
+            addNewItem(document, invoice.getInvoiceCode(), Element.ALIGN_CENTER, orderNumberValueFont);
+
+            addLineSpeactor(document);
+
+            addNewItem(document, "Date", Element.ALIGN_LEFT, orderNumberValueFont);
+            addNewItem(document, invoice.getDate(), Element.ALIGN_LEFT, orderNumberValueFont);
+
+            addLineSpeactor(document);
+
+            addNewItem(document, "Account Name", Element.ALIGN_LEFT, orderNumberValueFont);
+            addNewItem(document, invoice.getCustomerName(), Element.ALIGN_LEFT, orderNumberValueFont);
+
+            addLineSpeactor(document);
+
+            addNewItem(document, "Item Details", Element.ALIGN_LEFT, orderNumberValueFont);
+            addLineSpeactor(document);
+            for (int i = 0; i < invoiceItems.size(); i++) {
+                addNewItemWithLeftAndRight(document, invoiceItems.get(i).getItemName(), "(" + invoiceItems.get(i).getDiscount() +"%"+ ")", titleFont, orderNumberValueFont);
+                addNewItemWithLeftAndRight(document, "" + invoiceItems.get(i).getQuantity() + "*" + invoiceItems.get(i).getRate() + "", "" + invoiceItems.get(i).getTotal() + "", titleFont, orderNumberValueFont);
+                addLineSpeactor(document);
+            }
+
+//            addNewItemWithLeftAndRight(document, "Pizza 21", "(0.0%)", titleFont, orderNumberValueFont);
+//            addNewItemWithLeftAndRight(document, "12.0*1000", "12000.0", titleFont, orderNumberValueFont);
+//            addLineSpeactor(document);
+//
+//            addNewItemWithLeftAndRight(document, "Pizza 22", "(0.0%)", titleFont, orderNumberValueFont);
+//            addNewItemWithLeftAndRight(document, "12.0*1000", "12000.0", titleFont, orderNumberValueFont);
+//            addLineSpeactor(document);
+
+            addLineSpace(document);
+            addLineSpace(document);
+            addNewItemWithLeftAndRight(document, "Total", ""+invoice.getTotal()+"", titleFont, orderNumberValueFont);
+            addLineSpace(document);
+            addLineSpace(document);
+            addLineSpace(document);
+            addNewItemWithLeftAndRight(document, "", "Signature", titleFont, orderNumberValueFont);
+
+            document.close();
+            Toast.makeText(InvoiceViewActivity.this, "success", Toast.LENGTH_LONG).show();
+
+            printPDF();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        pdfDocument.close();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void printPDF() {
+        PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+        try {
+            PrintDocumentAdapter printDocumentAdapter = new pdfDocumentAdapter(InvoiceViewActivity.this, Common.getAppPath(InvoiceViewActivity.this) + "test_pdf.pdf");
+            printManager.print("Document", printDocumentAdapter, new PrintAttributes.Builder().build());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void addNewItemWithLeftAndRight(Document document, String textLeft, String textRight, Font textLeftRight, Font rightFont) throws DocumentException {
+        Chunk chunkTextLeft = new Chunk(textLeft, textLeftRight);
+        Chunk chunkTextRight = new Chunk(textRight, rightFont);
+        Paragraph p = new Paragraph(chunkTextLeft);
+        p.add(new Chunk(new VerticalPositionMark()));
+        p.add(chunkTextRight);
+        document.add(p);
+
+
+    }
+
+    private void addLineSpeactor(Document document) throws DocumentException {
+        LineSeparator lineSeparator = new LineSeparator();
+        lineSeparator.setLineColor(new BaseColor(0, 0, 0, 68));
+        addLineSpace(document);
+        document.add(new Chunk(lineSeparator));
+        addLineSpace(document);
+    }
+
+    private void addLineSpace(Document document) throws DocumentException {
+        document.add(new Paragraph(""));
+    }
+
+    private void addNewItem(Document document, String text, int align, Font font) throws DocumentException {
+        Chunk chunk = new Chunk(text, font);
+        Paragraph paragraph = new Paragraph(chunk);
+        paragraph.setAlignment(align);
+        document.add(paragraph);
     }
 
     private boolean checkPermission() {
@@ -247,26 +269,21 @@ public class InvoiceViewActivity extends AppCompatActivity {
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0) {
-
-                // after requesting permissions we are showing
-                // users a toast message of permission granted.
-                boolean writeStorage = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                boolean readStorage = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-
-                if (writeStorage && readStorage) {
-                    Toast.makeText(this, "Permission Granted..", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Permission Denined.", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-        }
+    public Toolbar getToolbar() {
+        return toolbaruni;
     }
 
+    public void setTitleToolbar(String string) {
+
+        TextView toolbar_text = (TextView) toolbaruni.findViewById(R.id.title);
+        toolbar_text.setText(string);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(InvoiceViewActivity.this, InvoiceActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

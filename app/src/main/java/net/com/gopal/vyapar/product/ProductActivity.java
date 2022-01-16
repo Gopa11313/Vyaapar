@@ -78,7 +78,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.submitButton:
                 try {
                     Product product = new Product();
@@ -94,12 +94,20 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                             db.productDao().insertAll(product);
                             List<Product> p = db.productDao().getAll();
                             System.out.println(p);
+                            clean();
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
         }
+    }
+
+    private void clean() {
+        description.setText("");
+        productCode.setText("");
+        rate.setText("");
+        Supplier.setText("");
     }
 }

@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -59,7 +60,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     public TextView title;
     private AppCompatEditText invoiceCode, pick_date, tin_Number, customername;
     private Spinner invoice_type;
-    private AppCompatButton createCustomer, addItem;
+    private AppCompatButton createCustomer, addItem, proceedforReceipt;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private String futureDate;
     private Dialog dialog;
@@ -109,6 +110,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         invoiceCode = findViewById(R.id.invoiceCode);
         pick_date = findViewById(R.id.pick_date);
         tin_Number = findViewById(R.id.tin_Number);
+        proceedforReceipt = findViewById(R.id.proceedforReceipt);
         invoice_type = findViewById(R.id.invoice_type);
         selectCustomer = findViewById(R.id.selectCustomer);
         createCustomer = findViewById(R.id.createCustomer);
@@ -121,6 +123,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         customername.setOnClickListener(this);
         pick_date.setOnClickListener(this);
         addItem.setOnClickListener(this);
+        proceedforReceipt.setOnClickListener(this);
         ArrayList<Customer> customerTypes = new ArrayList<>();
         Customer customer = new Customer();
         customer.setCustomerType("Credit");
@@ -179,25 +182,70 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.proceed:
                 try {
-                    Invoice invoice = new Invoice();
-                    Gson gson = new Gson();
-                    String data = gson.toJson(invoiceItems);
-                    invoice.setInvoiceItem(data);
-                    invoice.setInvoiceCode(invoiceCode.getText().toString());
+                    String invoiceCodes = invoiceCode.getText().toString();
+                    String custNAme = customername.getText().toString();
+                    String date = pick_date.getText().toString();
+                    String tin = tin_Number.getText().toString();
+                    String ttl = total.getText().toString();
+                    if (!invoiceCodes.isEmpty() && !custNAme.isEmpty() && !date.isEmpty() && !tin.isEmpty() && !ttl.isEmpty()) {
+                        Invoice invoice = new Invoice();
+                        if (invoiceItems != null && invoiceItems.size() > 3) {
+                            Gson gson = new Gson();
+                            String data = gson.toJson(invoiceItems);
+                            invoice.setInvoiceItem(data);
+                            invoice.setInvoiceCode(invoiceCodes);
 
-                    invoice.setInvoiceType("Cash");
-                    invoice.setCustomerName(customername.getText().toString());
-                    invoice.setDate(pick_date.getText().toString());
-                    invoice.setTinNo(tin_Number.getText().toString());
-                    invoice.setTotal(total.getText().toString());
-                    String invoiceData = gson.toJson(invoice);
-                    Intent intent1 = new Intent(InvoiceActivity.this, InvoiceViewActivity.class);
-                    intent1.putExtra("data", invoiceData);
-                    startActivity(intent1);
+                            invoice.setInvoiceType("Cash");
+                            invoice.setCustomerName(custNAme);
+                            invoice.setDate(date);
+                            invoice.setTinNo(tin);
+                            invoice.setTotal(ttl);
+                            String invoiceData = gson.toJson(invoice);
+                            Intent intent1 = new Intent(InvoiceActivity.this, InvoiceViewActivity.class);
+                            intent1.putExtra("data", invoiceData);
+                            startActivity(intent1);
+                        } else {
+                            Toast.makeText(InvoiceActivity.this, "Please Add Item more than 3", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(InvoiceActivity.this, "Please Fill all the text", Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
+            case R.id.proceedforReceipt:
+                String invoiceCodes1 = invoiceCode.getText().toString();
+                String custNAme1 = customername.getText().toString();
+                String date1 = pick_date.getText().toString();
+                String tin1 = tin_Number.getText().toString();
+                String ttl1 = total.getText().toString();
+                if (!invoiceCodes1.isEmpty() && !custNAme1.isEmpty() && !date1.isEmpty() && !tin1.isEmpty() && !ttl1.isEmpty()) {
+                    Invoice invoice = new Invoice();
+                    if (invoiceItems != null && invoiceItems.size() > 3) {
+                        Invoice invoice1 = new Invoice();
+                        Gson gson = new Gson();
+                        String data = gson.toJson(invoiceItems);
+                        invoice1.setInvoiceItem(data);
+                        invoice1.setInvoiceCode(invoiceCodes1);
+
+                        invoice1.setInvoiceType("Cash");
+                        invoice1.setCustomerName(custNAme1);
+                        invoice1.setDate(date1);
+                        invoice1.setTinNo(tin1);
+                        invoice1.setTotal(ttl1);
+                        String invoiceData = gson.toJson(invoice);
+                        Intent intent1 = new Intent(InvoiceActivity.this, ReceptActivity.class);
+                        intent1.putExtra("data", invoiceData);
+                        startActivity(intent1);
+                    } else {
+                        Toast.makeText(InvoiceActivity.this, "Please Add Item more than 3", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(InvoiceActivity.this, "Please Fill all the text", Toast.LENGTH_LONG).show();
+                }
+                break;
+
         }
 
     }
@@ -240,7 +288,13 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         rate = dialog1.findViewById(R.id.rate);
         totoal = dialog1.findViewById(R.id.totoal);
         taxInRuppe = dialog1.findViewById(R.id.taxInRuppe);
+        taxInRuppe.setFocusable(false);
+        taxInRuppe.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+        taxInRuppe.setClickable(false);
         discountInRupee = dialog1.findViewById(R.id.discountInRupee);
+        discountInRupee.setFocusable(false);
+        discountInRupee.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+        discountInRupee.setClickable(false);
         quantity = dialog1.findViewById(R.id.quantity);
         discount = dialog1.findViewById(R.id.discount);
         tax = dialog1.findViewById(R.id.tax);
