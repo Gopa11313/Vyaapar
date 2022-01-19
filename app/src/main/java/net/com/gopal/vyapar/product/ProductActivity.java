@@ -39,7 +39,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         setTitleToolbar("Product Register");
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbaruni.setOnClickListener(new View.OnClickListener() {
+        toolbaruni.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();

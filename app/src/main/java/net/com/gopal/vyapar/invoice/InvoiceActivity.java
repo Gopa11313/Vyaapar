@@ -417,7 +417,8 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             String item=selectItem.getText().toString();
             String qty=quantity.getText().toString();
             String rt=rate.getText().toString();
-            if(!dis.isEmpty()&&!item.isEmpty()&&!qty.isEmpty()&&!rt.isEmpty()) {
+            String tx=tax.getText().toString();
+            if(!dis.isEmpty()&&!item.isEmpty()&&!qty.isEmpty()&&!rt.isEmpty()&&tx.isEmpty()) {
                 InvoiceItem invoiceItem = new InvoiceItem();
                 invoiceItem.setDiscount(dis);
                 invoiceItem.setItemName(item);
@@ -446,6 +447,10 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 if(rt.isEmpty()){
                     rate.setError("Please set a rate");
+                    rate.requestFocus();
+                } if(tx.isEmpty()){
+                    tax.setError("Please set a rate");
+                    tax.requestFocus();
                 }
             }
         });

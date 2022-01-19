@@ -23,7 +23,7 @@ import net.com.gopal.vyapar.supplier.SupplierActivity;
 import org.jetbrains.annotations.NotNull;
 
 public class DashboardFragment extends Fragment implements View.OnClickListener {
-    private LinearLayout customerLayout, productLayout, companyLayout, SupplierLayout, invoice;
+    private LinearLayout customerLayout, productLayout, companyLayout, SupplierLayout, invoice, list;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,11 +49,13 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         SupplierLayout = view.findViewById(R.id.SupplierLayout);
         companyLayout = view.findViewById(R.id.companyLayout);
         invoice = view.findViewById(R.id.invoice);
+        list = view.findViewById(R.id.list);
         customerLayout.setOnClickListener(this);
         productLayout.setOnClickListener(this);
         companyLayout.setOnClickListener(this);
         SupplierLayout.setOnClickListener(this);
         invoice.setOnClickListener(this);
+        list.setOnClickListener(this);
 
 
     }
@@ -81,6 +83,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
                 Intent intent4 = new Intent(requireActivity(), InvoiceActivity.class);
                 startActivity(intent4);
                 break;
+//            case R.id.list:
+//                Intent intent5 = new Intent(requireActivity(), InvoiceActivity.class);
+//                startActivity(intent5);
+//                break;
         }
     }
 }
