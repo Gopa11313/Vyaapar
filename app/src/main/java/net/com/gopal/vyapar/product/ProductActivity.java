@@ -81,22 +81,46 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.submitButton:
                 try {
-                    Product product = new Product();
-                    product.setDescription(description.getText().toString());
-                    product.setImageUrl("");
-                    product.setProductCode(productCode.getText().toString());
-                    product.setRate(rate.getText().toString());
-                    product.setSupplier(Supplier.getText().toString());
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-                            db.productDao().insertAll(product);
-                            List<Product> p = db.productDao().getAll();
-                            System.out.println(p);
-                            clean();
+                    String dis = description.getText().toString();
+                    String pCode = productCode.getText().toString();
+                    String rt = rate.getText().toString();
+                    String sp = Supplier.getText().toString();
+                    if (!dis.isEmpty() && !pCode.isEmpty() && !rt.isEmpty() && !sp.isEmpty()) {
+                        Product product = new Product();
+                        product.setDescription(dis);
+                        product.setImageUrl("");
+                        product.setProductCode(pCode);
+                        product.setRate(rt);
+                        product.setSupplier(sp);
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+                                db.productDao().insertAll(product);
+                                List<Product> p = db.productDao().getAll();
+                                System.out.println(p);
+                                clean();
+                            }
+                        });
+                    }
+                    else{
+                        if(dis.isEmpty()){
+                            description.setError("Please enter product description");
+                            description.requestFocus();
                         }
-                    });
+                        if(pCode.isEmpty()){
+                            productCode.setError("Please enter product code");
+                            productCode.requestFocus();
+                        }
+                        if(rt.isEmpty()){
+                            rate.setError("Please enter product rate");
+                            rate.requestFocus();
+                        }
+                        if(sp.isEmpty()){
+                            Supplier.setError("Please enter product Supplier");
+                            Supplier.requestFocus();
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -85,27 +85,71 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.submitButton:
-                Company company=new Company();
-                company.setName(companyName.getText().toString());
-                company.setAaddress1(address1.getText().toString());
-                company.setAddress2(address2.getText().toString());
-                company.setAddress3(address3.getText().toString());
-                company.setState(state.getText().toString());
-                company.setZip(zip.getText().toString());
-                company.setSales(sales.getText().toString());
-                company.setOffice(office.getText().toString());
-                company.setMobile(mobile.getText().toString());
-                company.setEmail(email.getText().toString());
-                company.setWebsite(website.getText().toString());
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppDatabase db=AppDatabase.getDatabase(getApplicationContext());
-                        db.companyDao().insertAll(company);
-                        List<Company> list=db.companyDao().getAll();
-                        System.out.println("Gopal: "+list);
+                String cName=companyName.getText().toString();
+                String ad1=address1.getText().toString();
+                String ad2=address2.getText().toString();
+                String ad3=address3.getText().toString();
+                String st=state.getText().toString();
+                String zp=zip.getText().toString();
+                String sale=sales.getText().toString();
+                String ofc=office.getText().toString();
+                String mbl=mobile.getText().toString();
+                String em=email.getText().toString();
+                String web=website.getText().toString();
+                if(!cName.isEmpty()&&ad1.isEmpty()&&!st.isEmpty()&&!zp.isEmpty()&&!sale.isEmpty()&&!ofc.isEmpty()&&!mbl.isEmpty()&&!em.isEmpty()) {
+                    Company company = new Company();
+                    company.setName(cName);
+                    company.setAaddress1(ad1);
+                    company.setAddress2(ad2);
+                    company.setAddress3(ad3);
+                    company.setState(st);
+                    company.setZip(zp);
+                    company.setSales(sale);
+                    company.setOffice(ofc);
+                    company.setMobile(mbl);
+                    company.setEmail(em);
+                    company.setWebsite(web);
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+                            db.companyDao().insertAll(company);
+                            List<Company> list = db.companyDao().getAll();
+                            System.out.println("Gopal: " + list);
+                        }
+                    });
+                }else{
+                    if(cName.isEmpty()){
+                        companyName.setError("Please enter company name");
+                        companyName.requestFocus();
                     }
-                });
+                    if(ad1.isEmpty()){
+                        address1.setError("Please provide a address");
+                        address1.requestFocus();
+                    }
+                    if(st.isEmpty()){
+                        state.setError("Please enter company state");
+                        state.requestFocus();
+                    }
+                    if(zp.isEmpty()){
+                        zip.setError("Please enter zip code");
+                    }
+                    if(sale.isEmpty()){
+                        sales.setError("Please enter company sales");
+                        sales.requestFocus();
+                    }
+                    if(ofc.isEmpty()){
+                        office.setError("Please enter office name");
+                        office.requestFocus();
+                    }
+                    if(mbl.isEmpty()){
+                        mobile.setError("Please enter a mobile number");
+                    }
+                    if(em.isEmpty()){
+                        email.setError("Please enter a company email");
+                        email.requestFocus();
+                    }
+                }
                 break;
         }
     }

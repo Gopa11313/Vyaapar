@@ -208,6 +208,22 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                             Toast.makeText(InvoiceActivity.this, "Please Add Item more than 3", Toast.LENGTH_LONG).show();
                         }
                     } else {
+                        if(invoiceCodes.isEmpty()) {
+                            invoiceCode.setError("Please fill this");
+                            invoiceCode.requestFocus();
+                        }
+                        if(custNAme.isEmpty()){
+                            customername.setError("Please Provide Customer NAme");
+                            customername.requestFocus();
+                        }
+                        if(date.isEmpty()){
+                            pick_date.setError("Please provide a date");
+                            tin_Number.requestFocus();
+                        }
+                        if(tin.isEmpty()){
+                            tin_Number.setError("Please enter tin no.");
+                            tin_Number.requestFocus();
+                        }
                         Toast.makeText(InvoiceActivity.this, "Please Fill all the text", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
@@ -242,10 +258,27 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                         Toast.makeText(InvoiceActivity.this, "Please Add Item more than 3", Toast.LENGTH_LONG).show();
                     }
                 } else {
+                    if(invoiceCodes1.isEmpty()) {
+                        invoiceCode.setError("Please fill this");
+                        tin_Number.requestFocus();
+                    }
+                    if(custNAme1.isEmpty()){
+                        customername.setError("Please Provide Customer NAme");
+                        tin_Number.requestFocus();
+
+                    }
+                    if(date1.isEmpty()){
+                        pick_date.setError("Please provide a date");
+                        tin_Number.requestFocus();
+
+                    }
+                    if(tin1.isEmpty()){
+                        tin_Number.setError("Please enter tin no.");
+                        tin_Number.requestFocus();
+                    }
                     Toast.makeText(InvoiceActivity.this, "Please Fill all the text", Toast.LENGTH_LONG).show();
                 }
                 break;
-
         }
 
     }
@@ -380,18 +413,41 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             dialog1.dismiss();
         });
         proceed.setOnClickListener(v -> {
-            InvoiceItem invoiceItem = new InvoiceItem();
-            invoiceItem.setDiscount(discount.getText().toString());
-            invoiceItem.setItemName(selectItem.getText().toString());
-            invoiceItem.setQuantity(quantity.getText().toString());
-            invoiceItem.setRate(rate.getText().toString());
-            invoiceItem.setTotal(totoal.getText().toString());
-            String tex = taxInRuppe.getText().toString().replace("₹", "");
-            invoiceItem.setTax(tex.replace(" ", ""));
-            invoiceItems.add(invoiceItem);
-            totalAmount = totalAmount + Double.parseDouble(totoal.getText().toString());
-            dialog1.dismiss();
-            setData();
+            String dis=discount.getText().toString();
+            String item=selectItem.getText().toString();
+            String qty=quantity.getText().toString();
+            String rt=rate.getText().toString();
+            if(!dis.isEmpty()&&!item.isEmpty()&&!qty.isEmpty()&&!rt.isEmpty()) {
+                InvoiceItem invoiceItem = new InvoiceItem();
+                invoiceItem.setDiscount(dis);
+                invoiceItem.setItemName(item);
+                invoiceItem.setQuantity(qty);
+                invoiceItem.setRate(rt);
+                invoiceItem.setTotal(totoal.getText().toString());
+                String tex = taxInRuppe.getText().toString().replace("₹", "");
+                invoiceItem.setTax(tex.replace(" ", ""));
+                invoiceItems.add(invoiceItem);
+                totalAmount = totalAmount + Double.parseDouble(totoal.getText().toString());
+                dialog1.dismiss();
+                setData();
+            }
+            else{
+                if(dis.isEmpty()){
+                    discount.setError("Please enter discount percentage");
+                    discount.requestFocus();
+                }
+                if(item.isEmpty()){
+                    selectItem.setError("Please Select a item");
+                    selectItem.requestFocus();
+                }
+                if (qty.isEmpty()){
+                    quantity.setError("Please enter quantity");
+                    quantity.requestFocus();
+                }
+                if(rt.isEmpty()){
+                    rate.setError("Please set a rate");
+                }
+            }
         });
         dialog1.show();
         dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));

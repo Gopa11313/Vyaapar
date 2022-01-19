@@ -137,53 +137,99 @@ public class CustomerActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.submitButton:
                 try {
-                    success = false;
-                    Customer customer = new Customer();
-                    customer.setAddress(address.getText().toString());
-                    customer.setBranch(address.getText().toString());
-                    customer.setCity(city.getText().toString());
+                    String addr = address.getText().toString();
+                    String brnch = branchName.getText().toString();
+                    String cty = city.getText().toString();
+                    String email = emailAddress.getText().toString();
+                    String ll = land_line.getText().toString();
+                    String cName = customerNAme.getText().toString();
+                    String tinNo = tin_number.getText().toString();
+                    String nt = notes.getText().toString();
+                    String zp = zip.getText().toString();
+                    if (!addr.isEmpty() && !brnch.isEmpty() && !cty.isEmpty() && !email.isEmpty() && !ll.isEmpty() && !cName.isEmpty() && !tinNo.isEmpty() && !nt.isEmpty() && !zp.isEmpty()) {
+                        success = false;
+                        Customer customer = new Customer();
+                        customer.setAddress(addr);
+                        customer.setBranch(brnch);
+                        customer.setCity(cty);
 //               Int a=customerType.getSelectedItemPosition();
-                    customer.setCustomerType("Credit");
-                    customer.setEmail(emailAddress.getText().toString());
-                    customer.setLandLine(land_line.getText().toString());
-                    customer.setName(customerNAme.getText().toString());
-                    customer.setTinNumber(tin_number.getText().toString());
-                    customer.setNote(notes.getText().toString());
-                    customer.setZip(zip.getText().toString());
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
-                            db.customerDao().insertAll(customer);
-                            if (from == null) {
-                                success = true;
-                            } else {
-                                finish();
-                                startActivity(new Intent(CustomerActivity.this, InvoiceActivity.class));
-                            }
+                        customer.setCustomerType("Credit");
+                        customer.setEmail(email);
+                        customer.setLandLine(ll);
+                        customer.setName(cName);
+                        customer.setTinNumber(tinNo);
+                        customer.setNote(nt);
+                        customer.setZip(zp);
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+                                db.customerDao().insertAll(customer);
+                                if (from == null) {
+                                    success = true;
+                                } else {
+                                    finish();
+                                    startActivity(new Intent(CustomerActivity.this, InvoiceActivity.class));
+                                }
 
-                        }
-                    });
-                    Snackbar snackbar = Snackbar
-                            .make(snackbar_action, "Customer Register Successfully!!", Snackbar.LENGTH_LONG)
-                            .setAction("Ok", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                            }
+                        });
+                        Snackbar snackbar = Snackbar
+                                .make(snackbar_action, "Customer Register Successfully!!", Snackbar.LENGTH_LONG)
+                                .setAction("Ok", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
 
 //                                    Snackbar snackbar1 = Snackbar.make(snackbar_action, "Message is restored!", Snackbar.LENGTH_SHORT);
 //                                    snackbar1.show();
-                                }
-                            });
+                                    }
+                                });
 
-                    snackbar.show();
-                    clear();
+                        snackbar.show();
+                        clear();
+                    } else {
+                        if (addr.isEmpty()) {
+                            address.setError("Please enter address");
+                            address.requestFocus();
+                        }
+                        if (brnch.isEmpty()) {
+                            branchName.setError("Please enter branch");
+                            branchName.requestFocus();
+                        }
+
+                        if (cty.isEmpty()) {
+                            city.setError("Please enter city");
+                            city.requestFocus();
+                        }
+                        if (email.isEmpty()) {
+                            emailAddress.setError("Please enter your email address");
+                            emailAddress.requestFocus();
+                        }
+                        if (ll.isEmpty()) {
+                            land_line.setError("Please enter your land line");
+                        }
+                        if (cName.isEmpty()) {
+                            customerNAme.setError("Please enter customer name");
+                        }
+                        if (tinNo.isEmpty()) {
+                            tin_number.setError("Please enter tin no.");
+                        }
+                        if (nt.isEmpty()) {
+                            notes.setError("Please enter some notes");
+                        }
+                        if (zp.isEmpty()) {
+                            zip.setError("Please enter your country zip code");
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 break;
         }
     }
-    private void clear(){
+
+    private void clear() {
         branchName.setText("");
         customerNAme.setText("");
         emailAddress.setText("");
